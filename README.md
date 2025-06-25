@@ -5,12 +5,14 @@ Este es un proyecto básico en **Python Flask** que incluye configuración para 
 
 ## **📂 Estructura del proyecto**
 
+```text
 tienda-zapatillas/
 ├── .venv/            # Entorno virtual
 ├── app.py            # Aplicación principal Flask
 ├── requirements.txt  # Dependencias
 ├── static/           # Archivos estáticos (CSS, JS, imágenes)
 └── templates/        # Plantillas HTML
+```
 
 ## **🚀 Configuración inicial**  
 
