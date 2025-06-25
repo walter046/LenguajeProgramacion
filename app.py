@@ -1,19 +1,43 @@
-from flask import Flask
-from flask import render_template
-from flaskext.mysql import MySQL
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_mysqldb import MySQL
+
+from config import config
+
+# Models:
+from models.ModelUser import ModelUser
+
+# Entities:
+from models.entities.User import User
 
 app = Flask(__name__)
 
-mysql = MySQL()
-app.config['MySQL_DATABASE_HOST'] = 'localhost'
-app.config['MySQL_DATABASE_USER'] = 'root'
-app.config['MySQL_DATABASE_PASSWORD'] = ''
-app.config['MySQL_DATABASE_DB'] = 'zapatillas'
-mysql.init_app(app)
+db = MySQL(app)
 
 @app.route('/')
 def index():
-    return render_template('/index.html')
+    return redirect(url_for('home'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        user = User(0, '', request.form['username'], request.form['password'], '', '', '')
+        logged_user = ModelUser.login(db, user)
+        if logged_user != None:
+            if logged_user.password:
+                return redirect(url_for('home'))
+            else:
+                flash("Password Invalida!")
+            return render_template('auth/login.html')
+        else:
+            flash("Usuario no encontrado!")
+            return render_template('auth/login.html')
+    else:
+        return render_template('auth/login.html')
+    
+@app.route('/home')
+def home():
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.config.from_object(config['development'])
+    app.run()
