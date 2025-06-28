@@ -1,6 +1,6 @@
 {% extends 'app.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
     <div class="flex flex-col justify-center sm:h-screen p-4">
@@ -12,25 +12,20 @@
                 </a>
             </div>
 
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50" role="alert">
-                <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                </svg>
-                <span class="sr-only">Info</span>
-                {% for message in messages %}
-                <div>
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
-
-            <form action="/login" method="POST">
+            <form action="/register" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="space-y-6">
+                    <div>
+                        {{ form.nombre.label(for="nombre", class="text-slate-900 text-sm font-medium mb-2 block") }} {{ form.nombre(id="nombre",
+                        class="text-slate-900 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500",
+                        placeholder="Nombre", type="text") }} {% if form.nombre.errors %}
+                        <ul class="text-red-500">
+                            {% for error in form.nombre.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
                     <div>
                         {{ form.username.label(for="username", class="text-slate-900 text-sm font-medium mb-2 block") }} {{ form.username(id="username",
                         class="text-slate-900 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500",
@@ -53,14 +48,36 @@
                         </ul>
                         {% endif %}
                     </div>
+                    <div>
+                        {{ form.direccion.label(for="direccion", class="text-slate-900 text-sm font-medium mb-2 block") }} {{ form.direccion(id="direccion",
+                        class="text-slate-900 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500",
+                        placeholder="Dirección", type="text") }} {% if form.direccion.errors %}
+                        <ul class="text-red-500">
+                            {% for error in form.direccion.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {{ form.telefono.label(for="telefono", class="text-slate-900 text-sm font-medium mb-2 block") }} {{ form.telefono(id="telefono",
+                        class="text-slate-900 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500",
+                        placeholder="Teléfono", type="text") }} {% if form.telefono.errors %}
+                        <ul class="text-red-500">
+                            {% for error in form.telefono.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
                 </div>
 
                 <div class="mt-12">
                     {{ form.submit(class="w-full py-3 px-4 text-sm tracking-wider font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none cursor-pointer") }}
                 </div>
                 <p class="text-slate-600 text-sm mt-6 text-center">
-                    No tienes una cuenta?
-                    <a href="/register" class="text-blue-600 font-medium hover:underline ml-1">Registrate</a>
+                    Ya tiene una cuenta?
+                    <a href="/login" class="text-blue-600 font-medium hover:underline ml-1">Inicia Sesión</a>
                 </p>
             </form>
         </div>
