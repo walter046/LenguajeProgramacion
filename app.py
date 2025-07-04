@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 from flask import Flask, render_template, redirect, url_for, session, flash, request, jsonify
-=======
-from flask import Flask, render_template, redirect, url_for, session, flash
->>>>>>> 6ceaaffd1259dc87e41cc292e70d7169f3657256
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, ValidationError
@@ -14,35 +10,22 @@ app = Flask(__name__)
 # MySQL Configuration
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-<<<<<<< HEAD
 app.config['MYSQL_PASSWORD'] = 'root'
-=======
-app.config['MYSQL_PASSWORD'] = ''
->>>>>>> 6ceaaffd1259dc87e41cc292e70d7169f3657256
 app.config['MYSQL_DB'] = 'tienda_zapatillas'
 app.secret_key = '48dfa2e08c42b1fa67f5f6ffbcba98b73febe6972123259da3759a84c304b1f5'
 
 mysql = MySQL(app)
 
 class RegisterForm(FlaskForm):
-<<<<<<< HEAD
     nombre = StringField("Nombre", validators=[DataRequired()])
     username = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
     direccion = StringField("Direccion", validators=[DataRequired()])
     telefono = StringField("Telefono", validators=[DataRequired()])
-=======
-    nombre = StringField("Nombre", validators = [DataRequired()])
-    username = StringField("Email", validators = [DataRequired(), Email()])
-    password = PasswordField("Password", validators = [DataRequired()])
-    direccion = StringField("Direccion", validators = [DataRequired()])
-    telefono = StringField("Telefono", validators = [DataRequired()])
->>>>>>> 6ceaaffd1259dc87e41cc292e70d7169f3657256
     submit = SubmitField("Register")
     
     def validate_email(self, field):
         cursor = mysql.connection.cursor()
-<<<<<<< HEAD
         cursor.execute("SELECT * FROM usuarios WHERE username=%s", (field.data,))
         usuario = cursor.fetchone()
         cursor.close()
@@ -52,28 +35,13 @@ class RegisterForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
-=======
-        cursor.execute("SELECT * FROM usuarios WHERE username=%s", (field.data))
-        usuario = cursor.fetchone()
-        cursor.close()
-        if usuario:
-            raise ValidationError('El email esta en uso!')
-        
-class LoginForm(FlaskForm):
-    username = StringField("Email", validators = [DataRequired(), Email()])
-    password = PasswordField("Password", validators = [DataRequired()])
->>>>>>> 6ceaaffd1259dc87e41cc292e70d7169f3657256
     submit = SubmitField("Login")
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-<<<<<<< HEAD
 @app.route('/register', methods=['GET', 'POST'])
-=======
-@app.route('/register', methods = ['GET', 'POST'])
->>>>>>> 6ceaaffd1259dc87e41cc292e70d7169f3657256
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -87,7 +55,6 @@ def register():
         
         # Database
         cursor = mysql.connection.cursor()
-<<<<<<< HEAD
         try:
             cursor.execute("INSERT INTO usuarios (nombre, username, password, direccion, telefono) VALUES (%s, %s, %s, %s, %s)", 
                            (nombre, username, hashed_password, direccion, telefono))
@@ -104,17 +71,6 @@ def register():
     return render_template('auth/register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
-=======
-        cursor.execute("INSERT INTO usuarios (nombre, username, password, direccion, telefono) VALUES (%s, %s, %s, %s, %s)", (nombre, username, hashed_password, direccion, telefono))
-        mysql.connection.commit()
-        cursor.close()
-        
-        return redirect(url_for('login'))
-        
-    return render_template('auth/register.html', form = form)
-
-@app.route('/login', methods = ['GET', 'POST'])
->>>>>>> 6ceaaffd1259dc87e41cc292e70d7169f3657256
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -122,7 +78,6 @@ def login():
         password = form.password.data
         
         cursor = mysql.connection.cursor()
-<<<<<<< HEAD
         cursor.execute("SELECT id, nombre, password FROM usuarios WHERE username=%s", (username,))
         usuario = cursor.fetchone()
         cursor.close()
@@ -137,19 +92,6 @@ def login():
             # No redirigir, para que el usuario pueda corregir en el mismo formulario
             
     return render_template('auth/login.html', form=form)
-=======
-        cursor.execute("SELECT * FROM usuarios WHERE username=%s", (username,))
-        usuario = cursor.fetchone()
-        cursor.close()
-        if usuario and bcrypt.checkpw(password.encode('utf-8'), usuario[3].encode('utf-8')):
-            session['usuario_id'] = usuario[0]
-            return redirect(url_for('dashboard'))
-        else:
-            flash("Inicio de sesión fallido. Revisa tus datos ingresados!")
-            return redirect(url_for('login'))
-        
-    return render_template('auth/login.html', form = form)
->>>>>>> 6ceaaffd1259dc87e41cc292e70d7169f3657256
 
 @app.route('/dashboard')
 def dashboard():
@@ -157,16 +99,11 @@ def dashboard():
         usuario_id = session['usuario_id']
         
         cursor = mysql.connection.cursor()
-<<<<<<< HEAD
         cursor.execute("SELECT id, nombre, username, direccion, telefono FROM usuarios WHERE id=%s", (usuario_id,))
-=======
-        cursor.execute("SELECT * FROM usuarios WHERE id=%s", (usuario_id,))
->>>>>>> 6ceaaffd1259dc87e41cc292e70d7169f3657256
         usuario = cursor.fetchone()
         cursor.close()
         
         if usuario:
-<<<<<<< HEAD
             # Convertir la tupla a un diccionario para facilitar el acceso en la plantilla
             usuario_dict = {
                 'id': usuario[0],
@@ -181,15 +118,10 @@ def dashboard():
             return redirect(url_for('login'))
             
     flash("Por favor inicia sesión para acceder.", "warning")
-=======
-            return render_template('dashboard.html', usuario = usuario)
-        
->>>>>>> 6ceaaffd1259dc87e41cc292e70d7169f3657256
     return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():
-<<<<<<< HEAD
     username = session.pop('usuario_nombre', 'Usuario') # Obtener y eliminar el nombre de la sesión
     session.pop('usuario_id', None)
     flash(f"Hasta luego, {username}! Cerraste sesión correctamente.", "info")
@@ -318,11 +250,3 @@ def internal_error(error):
 
 if __name__ == '__main__':
     app.run(debug=True)
-=======
-    session.pop('usuario_id', None)
-    flash("Cerraste sesión correctamente!")
-    return redirect(url_for('login'))
-
-if __name__ == '__main__':
-    app.run(debug = True)
->>>>>>> 6ceaaffd1259dc87e41cc292e70d7169f3657256
