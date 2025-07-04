@@ -3,66 +3,91 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <div class="flex flex-col justify-center sm:h-screen p-4">
-        <div class="max-w-md w-full mx-auto border border-gray-300 rounded-2xl p-8">
-            <div class="text-center mb-12">
-                <a href="javascript:void(0)"><img
-                        src="https://img.freepik.com/vector-premium/logotipo-zapatillas_25327-267.jpg" alt="logo"
-                        class="w-40 inline-block" />
-                </a>
-            </div>
+<div class="flex flex-col justify-center min-h-screen p-4 bg-gradient-to-br from-blue-50 to-gray-50">
+    <div class="max-w-md w-full mx-auto bg-white rounded-2xl shadow-xl overflow-hidden p-8">
+        <div class="text-center mb-8">
+            <a href="/" class="inline-flex flex-col items-center">
+                <img src="https://img.freepik.com/vector-premium/logotipo-zapatillas_25327-267.jpg" alt="logo" 
+                     class="h-24 w-auto transform hover:scale-105 transition duration-300" />
+                <span class="mt-3 text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                    SneakerShop
+                </span>
+            </a>
+            <h1 class="mt-6 text-2xl font-bold text-gray-800">Bienvenido de vuelta</h1>
+            <p class="mt-2 text-sm text-gray-600">Inicia sesión para continuar</p>
+        </div>
 
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50" role="alert">
-                <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                </svg>
-                <span class="sr-only">Info</span>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flex items-center p-4 mb-6 text-sm text-red-800 rounded-lg bg-red-50 border border-red-300" role="alert">
+            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+            </svg>
+            <span class="sr-only">Info</span>
+            <div>
                 {% for message in messages %}
-                <div>
-                    {{ message }}
-                </div>
+                <span>{{ message }}</span>
                 {% endfor %}
             </div>
-            {% endif %}
-            {% endwith %}
-
-            <form action="/login" method="POST">
-                {{ form.hidden_tag() }}
-                <div class="space-y-6">
-                    <div>
-                        {{ form.username.label(for="username", class="text-slate-900 text-sm font-medium mb-2 block") }} {{ form.username(id="username",
-                        class="text-slate-900 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500",
-                        placeholder="Email", type="text") }} {% if form.username.errors %}
-                        <ul class="text-red-500">
-                            {% for error in form.username.errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                    </div>
-                    <div>
-                        {{ form.password.label(for="password", class="text-slate-900 text-sm font-medium mb-2 block") }} {{ form.password(id="password",
-                        class="text-slate-900 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500",
-                        placeholder="Contraseña", type="password") }} {% if form.password.errors %}
-                        <ul class="text-red-500">
-                            {% for error in form.password.errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="mt-12">
-                    {{ form.submit(class="w-full py-3 px-4 text-sm tracking-wider font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none cursor-pointer") }}
-                </div>
-                <p class="text-slate-600 text-sm mt-6 text-center">
-                    No tienes una cuenta?
-                    <a href="/register" class="text-blue-600 font-medium hover:underline ml-1">Registrate</a>
-                </p>
-            </form>
         </div>
+        {% endif %}
+        {% endwith %}
+
+        <form action="/login" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="space-y-5">
+                <div>
+                    {{ form.username.label(for="username", class="block text-sm font-medium text-gray-700 mb-1") }} 
+                    {{ form.username(id="username",
+                    class="block w-full px-4 py-3 text-sm text-gray-900 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200",
+                    placeholder="tu@email.com", type="text") }} 
+                    {% if form.username.errors %}
+                    <ul class="mt-1 text-xs text-red-500">
+                        {% for error in form.username.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    {{ form.password.label(for="password", class="block text-sm font-medium text-gray-700 mb-1") }} 
+                    {{ form.password(id="password",
+                    class="block w-full px-4 py-3 text-sm text-gray-900 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200",
+                    placeholder="Introduce tu contraseña", type="password") }} 
+                    {% if form.password.errors %}
+                    <ul class="mt-1 text-xs text-red-500">
+                        {% for error in form.password.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                
+                <div class="flex items-center justify-center">
+                    <div class="text-sm">
+                        <a href="#" class="font-medium text-blue-600 hover:text-blue-500">¿Olvidaste tu contraseña?</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                {{ form.submit(class="w-full px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 transform hover:-translate-y-0.5") }}
+            </div>
+            
+            <div class="mt-6 flex items-center justify-center space-x-2">
+                <span class="h-px w-16 bg-gray-300"></span>
+                <span class="text-sm text-gray-500">o</span>
+                <span class="h-px w-16 bg-gray-300"></span>
+            </div>
+            
+            <p class="mt-6 text-sm text-center text-gray-600">
+                ¿No tienes una cuenta? 
+                <a href="/register" class="font-medium text-blue-600 hover:text-blue-500 transition duration-200">
+                    Regístrate
+                </a>
+            </p>
+        </form>
     </div>
+</div>
 {% endblock %}
