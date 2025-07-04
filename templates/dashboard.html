@@ -1,5 +1,8 @@
-{% extends 'app.html' %} {% block title %}Dashboard{% endblock %} {% block
-content %}
+{% extends 'app.html' %} 
+
+{% block title %}Dashboard{% endblock %} 
+
+{% block customCSS %}
 <style>
   /* Animaciones para los modales */
   .modal {
@@ -29,7 +32,9 @@ content %}
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
 </style>
+{% endblock %}
 
+{% block content %}
 <div class="max-w-4xl mx-auto p-6">
   {% if usuario %}
   <!-- Card Principal del Usuario -->
