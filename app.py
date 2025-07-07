@@ -56,8 +56,8 @@ def register():
         # Database
         cursor = mysql.connection.cursor()
         try:
-            cursor.execute("INSERT INTO usuarios (nombre, username, password, direccion, telefono) VALUES (%s, %s, %s, %s, %s)", 
-                           (nombre, username, hashed_password, direccion, telefono))
+            cursor.execute("INSERT INTO usuarios (nombre, username, password, direccion, telefono, rol) VALUES (%s, %s, %s, %s, %s)", 
+                           (nombre, username, hashed_password, direccion, telefono, 'USER'))
             mysql.connection.commit()
             flash("Cuenta creada exitosamente! Ya puedes iniciar sesión.", "success")
             return redirect(url_for('login'))
