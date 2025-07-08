@@ -52,12 +52,13 @@ def register():
         telefono = form.telefono.data
         
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        rol = 'USER'  # Rol por defecto para nuevos usuarios
         
         # Database
         cursor = mysql.connection.cursor()
         try:
-            cursor.execute("INSERT INTO usuarios (nombre, username, password, direccion, telefono, rol) VALUES (%s, %s, %s, %s, %s)", 
-                           (nombre, username, hashed_password, direccion, telefono, 'USER'))
+            cursor.execute("INSERT INTO usuarios (nombre, username, password, direccion, telefono, rol) VALUES (%s, %s, %s, %s, %s, %s)", 
+                           (nombre, username, hashed_password, direccion, telefono, rol))
             mysql.connection.commit()
             flash("Cuenta creada exitosamente! Ya puedes iniciar sesión.", "success")
             return redirect(url_for('login'))

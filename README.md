@@ -21,6 +21,11 @@ tienda-zapatillas/
 https://github.com/walter046/LenguajeProgramacion.git
 ```
 
+### **2. Instalar los requirements**
+```bash
+pip install -r requirements.txt
+```
+
 ### **2. Activar el entorno virtual**
 ```bash
 .\.venv\Scripts\activate
