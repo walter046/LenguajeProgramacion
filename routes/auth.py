@@ -27,7 +27,7 @@ def register():
                            (nombre, username, hashed_password, direccion, telefono, rol))
             mysql.connection.commit()
             flash("Cuenta creada exitosamente! Ya puedes iniciar sesión.", "success")
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
         except Exception as e:
             # Manejo de errores
             mysql.connection.rollback()
@@ -71,7 +71,7 @@ def login():
                 flash(f"Bienvenido, {usuario['nombre']}!", "success")
                 
                 next_page = request.args.get('next')
-                return redirect(next_page or url_for('dashboard'))
+                return redirect(next_page or url_for('user.dashboard'))
             else:
                 flash("Usuario o contraseña incorrectos", "error")
         
@@ -91,4 +91,4 @@ def logout():
     username = session.pop('usuario_nombre', 'Usuario') # Obtener y eliminar el nombre de la sesión
     session.pop('usuario_id', None)
     flash(f"Hasta luego, {username}! Cerraste sesión correctamente.", "info")
-    return redirect(url_for('login'))
+    return redirect(url_for('auth.login'))

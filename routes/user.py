@@ -29,18 +29,18 @@ def dashboard():
         else:
             flash("Usuario no encontrado.", "error")
             # Si el usuario no existe, redirigir al login
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
             
     flash("Por favor inicia sesión para acceder.", "warning")
     # Si no está autenticado, redirigir al login
-    return redirect(url_for('login'))
+    return redirect(url_for('auth.login'))
 
 # Ruta para actualizar los datos del usuario
 @user_bp.route('/update_user', methods=['POST'])
 def update_user():
     if 'usuario_id' not in session:
         flash("No tienes autorización para realizar esta acción.", "error")
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     
     try:
         # Obtener datos del formulario
@@ -53,7 +53,7 @@ def update_user():
         # Validaciones para los campos vacíos
         if not all([nombre, email, direccion, telefono]):
             flash("Todos los campos son obligatorios.", "error")
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('user.dashboard'))
         
         # Verificar si el email ya existe para otro usuario
         cursor = mysql.connection.cursor()
@@ -64,7 +64,7 @@ def update_user():
             flash("El email ya está en uso por otro usuario.", "error")
             cursor.close()
             # Redirigir al dashboard si ya esta en uso
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('user.dashboard'))
         
         # Actualizar datos
         cursor.execute("""
@@ -84,7 +84,7 @@ def update_user():
         print(f"Error updating user: {e}")
     
     # Redirigir al dashboard después de la actualización
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('user.dashboard'))
 
 # Ruta para eliminar el usuario
 @user_bp.route('/delete_user')
@@ -92,7 +92,7 @@ def delete_user():
     # Verificar si el usuario está autenticado
     if 'usuario_id' not in session:
         flash("No tienes autorización para realizar esta acción.", "error")
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     
     try:
         # Obtener el ID del usuario de la sesión
@@ -120,7 +120,7 @@ def delete_user():
         print(f"Error deleting user: {e}")
     
     # Redirigir al inicio después de eliminar la cuenta
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 # Ruta para obtener información del usuario (API)
 @user_bp.route('/api/user_info')

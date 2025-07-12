@@ -8,7 +8,7 @@ pedidos_bp = Blueprint('pedidos', __name__)
 def mis_pedidos():
     if 'usuario_id' not in session:
         flash("Debes iniciar sesión para ver tus pedidos", "error")
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     
     try:
         usuario_id = session['usuario_id']
@@ -42,7 +42,7 @@ def mis_pedidos():
         # Manejo de errores
         print(f"Error al obtener pedidos: {e}")
         flash("Error al cargar los pedidos", "error")
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('user.dashboard'))
 
 # Ruta para crear un pedido
 @pedidos_bp.route('/crear_pedido', methods=['POST'])

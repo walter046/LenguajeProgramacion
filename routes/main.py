@@ -37,9 +37,9 @@ def category(name):
 @main_bp.errorhandler(404)
 def not_found(error):
     flash("Página no encontrada.", "error")
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
 @main_bp.errorhandler(500)
 def internal_error(error):
     flash("Error interno del servidor. Por favor intenta nuevamente.", "error")
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))

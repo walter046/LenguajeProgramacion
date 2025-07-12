@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showNotification("Carrito cargado correctamente", "success");
         // Redirigir al carrito
         setTimeout(() => {
-          window.location.href = "{{ url_for('carrito') }}";
+          window.location.href = "{{ url_for('main.carrito') }}";
         }, 1500);
       } else {
         showNotification("Error al cargar el carrito", "error");
