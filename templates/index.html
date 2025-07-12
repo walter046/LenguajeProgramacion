@@ -91,130 +91,6 @@
 
 {% block content %}
 <body class="bg-gradient-sneaker min-h-screen flex flex-col">
-    <!-- Navegación mejorada -->
-    <nav class="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-          <div class="flex items-center space-x-8">
-            <a
-              href="{{ url_for('index') }}"
-              class="flex items-center space-x-2"
-            >
-              <span class="text-2xl font-bold text-blue-600">SNEAKER</span>
-              <span class="text-2xl font-bold text-gray-800">SHOP</span>
-            </a>
-            <div class="hidden md:flex space-x-6">
-              <a
-                href="{{ url_for('index') }}"
-                class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-                >Inicio</a
-              >
-              <a
-                href="{{ url_for('products') }}"
-                class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-                >Productos</a
-              >
-              <a
-                href="{{url_for('novedades')}}"
-                class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-                >Novedades</a
-              >
-              <a
-                href="{{url_for('ofertas')}}"
-                class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-                >Ofertas</a
-              >
-            </div>
-          </div>
-
-          <div class="flex items-center space-x-4">
-            <!-- Icono de carrito con contador -->
-            <div class="relative">
-              <button
-                id="cart-toggle"
-                class="text-gray-700 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
-              >
-                <i class="fas fa-shopping-cart text-xl"></i>
-                <span
-                  id="cart-count"
-                  class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
-                  >0</span
-                >
-              </button>
-            </div>
-
-            {% if session.usuario_id %}
-            <div class="relative group">
-              <button
-                class="flex items-center space-x-2 focus:outline-none py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <span class="text-gray-700 font-medium">
-                  {{ session.usuario_nombre or 'Usuario' }}
-                </span>
-                <!-- Icono de flecha para indicar que es un desplegable -->
-                <svg
-                  class="w-3 h-3 text-gray-500 transform group-hover:rotate-180 transition-transform duration-200"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </button>
-              <div
-                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform scale-95 group-hover:scale-100 origin-top-right"
-              >
-                <a
-                  href="{{ url_for('dashboard') }}"
-                  class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors"
-                >
-                  Dashboard
-                </a>
-                            <a
-              href="{{ url_for('carrito') }}"
-              class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors"
-            >
-              Mi Carrito
-            </a>
-            <a
-              href="{{ url_for('mis_pedidos') }}"
-              class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors"
-            >
-              Mis Pedidos
-            </a>
-                <hr class="border-gray-200 my-1" />
-                <a
-                  href="{{ url_for('logout') }}"
-                  class="block px-4 py-2 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-md mx-1 my-1 transition-colors"
-                >
-                  Cerrar Sesión
-                </a>
-              </div>
-            </div>
-            {% else %}
-            <a
-              href="{{ url_for('login') }}"
-              class="text-blue-600 hover:text-blue-700 font-medium py-2 px-3 rounded-lg transition-colors"
-              >Login</a
-            >
-            <a
-              href="{{ url_for('register') }}"
-              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              Registro
-            </a>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </nav>
-
     <!-- Mini carrito desplegable -->
     <div
       id="mini-cart"
@@ -284,7 +160,7 @@
             class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 animate-fadeInUp delay-200"
           >
             <a
-              href="{{ url_for('products') }}"
+              href="{{ url_for('main.products') }}"
               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transform hover:scale-105 transition-all duration-300 text-center"
             >
               Ver Colección
@@ -313,7 +189,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <a
-          href="{{ url_for('category', name='hombre') }}"
+          href="{{ url_for('main.category', name='hombre') }}"
           class="group relative overflow-hidden rounded-xl shadow-lg h-80"
         >
           <img
@@ -332,7 +208,7 @@
         </a>
 
         <a
-          href="{{ url_for('category', name='mujer') }}"
+          href="{{ url_for('main.category', name='mujer') }}"
           class="group relative overflow-hidden rounded-xl shadow-lg h-80"
         >
           <img
@@ -351,7 +227,7 @@
         </a>
 
         <a
-          href="{{ url_for('category', name='ninos') }}"
+          href="{{ url_for('main.category', name='ninos') }}"
           class="group relative overflow-hidden rounded-xl shadow-lg h-80"
         >
           <img
@@ -591,7 +467,7 @@
 
       <div class="text-center mt-12">
         <a
-          href="{{ url_for('products') }}"
+          href="{{ url_for('main.products') }}"
           class="inline-block bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors"
         >
           Ver Todos los Productos
@@ -755,7 +631,7 @@
           <input
             type="email"
             placeholder="Tu correo electrónico"
-            class="flex-grow px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            class="flex-grow px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 border border-gray-300 text-white"
           />
           <button
             type="submit"
@@ -766,160 +642,6 @@
         </form>
       </div>
     </section>
-
-    <!-- Footer mejorado -->
-    <footer class="bg-gray-900 text-white pt-12 pb-6">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <h3 class="text-xl font-bold mb-4">SneakerShop</h3>
-            <p class="text-gray-400">
-              La mejor selección de zapatillas deportivas y casuales en Perú.
-              Calidad, estilo y comodidad en un solo lugar.
-            </p>
-          </div>
-
-          <div>
-            <h4 class="font-bold text-lg mb-4">Compañía</h4>
-            <ul class="space-y-2">
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-white transition-colors"
-                  >Sobre Nosotros</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-white transition-colors"
-                  >Nuestras Tiendas</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-white transition-colors"
-                  >Trabaja con Nosotros</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-white transition-colors"
-                  >Blog</a
-                >
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 class="font-bold text-lg mb-4">Ayuda</h4>
-            <ul class="space-y-2">
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-white transition-colors"
-                  >Preguntas Frecuentes</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-white transition-colors"
-                  >Envíos y Devoluciones</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-white transition-colors"
-                  >Guía de Tallas</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-white transition-colors"
-                  >Contacto</a
-                >
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 class="font-bold text-lg mb-4">Síguenos</h4>
-            <div class="flex space-x-4">
-              <a
-                href="#"
-                class="text-gray-400 hover:text-white transition-colors text-xl"
-                ><i class="fab fa-facebook-f"></i
-              ></a>
-              <a
-                href="#"
-                class="text-gray-400 hover:text-white transition-colors text-xl"
-                ><i class="fab fa-instagram"></i
-              ></a>
-              <a
-                href="#"
-                class="text-gray-400 hover:text-white transition-colors text-xl"
-                ><i class="fab fa-twitter"></i
-              ></a>
-              <a
-                href="#"
-                class="text-gray-400 hover:text-white transition-colors text-xl"
-                ><i class="fab fa-tiktok"></i
-              ></a>
-            </div>
-            <div class="mt-4">
-              <h5 class="font-bold mb-2">Métodos de Pago</h5>
-              <div class="flex flex-wrap gap-2">
-                <img
-                  src="https://via.placeholder.com/40x25?text=Visa"
-                  alt="Visa"
-                  class="h-6"
-                />
-                <img
-                  src="https://via.placeholder.com/40x25?text=MC"
-                  alt="Mastercard"
-                  class="h-6"
-                />
-                <img
-                  src="https://via.placeholder.com/40x25?text=PayPal"
-                  alt="PayPal"
-                  class="h-6"
-                />
-                <img
-                  src="https://via.placeholder.com/40x25?text=Plin"
-                  alt="Plin"
-                  class="h-6"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center"
-        >
-          <p class="text-gray-400 text-sm">
-            &copy; 2023 SneakerShop. Todos los derechos reservados.
-          </p>
-          <div class="flex space-x-6 mt-4 md:mt-0">
-            <a
-              href="#"
-              class="text-gray-400 hover:text-white text-sm transition-colors"
-              >Términos y Condiciones</a
-            >
-            <a
-              href="#"
-              class="text-gray-400 hover:text-white text-sm transition-colors"
-              >Política de Privacidad</a
-            >
-          </div>
-        </div>
-      </div>
-    </footer>
 
     <script>
       // Sistema de carrito de compras

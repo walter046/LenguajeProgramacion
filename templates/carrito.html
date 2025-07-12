@@ -1,7 +1,7 @@
 {% extends 'app.html' %}
 {% block title %}Mi Carrito{% endblock %}
-{% block content %}
 
+{% block customCSS %}
 <style>
   .cart-item {
     border: 1px solid #e5e7eb;
@@ -43,110 +43,14 @@
     background: #fef2f2;
   }
 </style>
+{% endblock %}
 
-<nav class="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-16">
-      <div class="flex items-center space-x-8">
-        <a href="{{ url_for('index') }}" class="flex items-center space-x-2">
-          <span class="text-2xl font-bold text-blue-600">SNEAKER</span>
-          <span class="text-2xl font-bold text-gray-800">SHOP</span>
-        </a>
-        <div class="hidden md:flex space-x-6">
-          <a
-            href="{{ url_for('index') }}"
-            class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-            >Inicio</a
-          >
-          <a
-            href="{{ url_for('products') }}"
-            class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-            >Productos</a
-          >
-          <a
-            href="{{url_for('novedades')}}"
-            class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-            >Novedades</a
-          >
-          <a
-            href="{{url_for('ofertas')}}"
-            class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-            >Ofertas</a
-          >
-        </div>
-      </div>
-
-      <div class="flex items-center space-x-4">
-        {% if session.usuario_id %}
-        <div class="relative group">
-          <button
-            class="flex items-center space-x-2 focus:outline-none py-2 px-3 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            <span class="text-gray-700 font-medium">
-              {{ session.usuario_nombre or 'Usuario' }}
-            </span>
-            <svg
-              class="w-3 h-3 text-gray-500 transform group-hover:rotate-180 transition-transform duration-200"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              ></path>
-            </svg>
-          </button>
-          <div
-            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform scale-95 group-hover:scale-100 origin-top-right"
-          >
-            <a
-              href="{{ url_for('dashboard') }}"
-              class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors"
-            >
-              Dashboard
-            </a>
-            <a
-              href="#"
-              class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors"
-            >
-              Mis Pedidos
-            </a>
-            <hr class="border-gray-200 my-1" />
-            <a
-              href="{{ url_for('logout') }}"
-              class="block px-4 py-2 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-md mx-1 my-1 transition-colors"
-            >
-              Cerrar Sesión
-            </a>
-          </div>
-        </div>
-        {% else %}
-        <a
-          href="{{ url_for('login') }}"
-          class="text-blue-600 hover:text-blue-700 font-medium py-2 px-3 rounded-lg transition-colors"
-          >Login</a
-        >
-        <a
-          href="{{ url_for('register') }}"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-        >
-          Registro
-        </a>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</nav>
-
+{% block content %}
 <div class="max-w-6xl mx-auto px-4 py-8">
   <div class="flex items-center justify-between mb-8">
     <h1 class="text-3xl font-bold text-gray-900">Mi Carrito de Compras</h1>
     <a
-      href="{{ url_for('novedades') }}"
+      href="{{ url_for('main.novedades') }}"
       class="text-blue-600 hover:text-blue-700 font-medium"
     >
       ← Continuar Comprando

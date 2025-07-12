@@ -288,7 +288,7 @@
         <form
           class="p-6 space-y-6"
           method="POST"
-          action="{{ url_for('update_user') }}"
+          action="{{ url_for('user.update_user') }}"
         >
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -405,7 +405,7 @@
               Cancelar
             </button>
             <a
-              href="{{ url_for('delete_user') }}"
+              href="{{ url_for('user.delete_user') }}"
               class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
             >
               Eliminar Cuenta
