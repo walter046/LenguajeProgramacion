@@ -4,7 +4,7 @@
 
 {% block customCSS %}
 <style>
-  /* Animaciones para los modales */
+
   .modal {
     transition: all 0.3s ease;
   }
@@ -37,17 +37,15 @@
 {% block content %}
 <div class="max-w-4xl mx-auto p-6">
   {% if usuario %}
-  <!-- Card Principal del Usuario -->
   <div
     class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden"
   >
-    <!-- Header de la Card -->
+    <!-- Parate del peril del usuario -->
     <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
       <h2 class="text-2xl font-bold text-white">Mi Perfil</h2>
       <p class="text-blue-100">Gestiona tu información personal</p>
     </div>
 
-    <!-- Información del Usuario -->
     <div class="p-6">
       <div
         class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8"
@@ -75,7 +73,7 @@
           </div>
         </div>
 
-        <!-- Botones CRUD -->
+        <!--  aqui hacemos Botones CRUD -->
         <div class="flex flex-wrap gap-3">
           <button
             onclick="openModal('viewModal')"
@@ -192,7 +190,7 @@
     </div>
   </div>
 
-  <!-- Modal Ver Información -->
+  <!--este es unn Modal Ver Información -->
   <div
     id="viewModal"
     class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50"
