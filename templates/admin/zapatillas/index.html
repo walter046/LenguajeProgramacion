@@ -1,0 +1,26 @@
+
+{% extends 'layout.html' %}
+{% block content %}
+<h2>Zapatillas</h2>
+<a href="{{ url_for('admin.crear_zapatilla') }}" class="btn btn-primary mb-3">Agregar Nueva</a>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th><th>Nombre</th><th>Marca</th><th>Precio</th><th>Stock</th><th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for z in zapatillas %}
+    <tr>
+      <td>{{ z[0] }}</td><td>{{ z[1] }}</td><td>{{ z[2] }}</td><td>S/. {{ z[4] }}</td><td>{{ z[5] }}</td>
+      <td>
+        <a href="{{ url_for('admin.editar_zapatilla', id=z[0]) }}" class="btn btn-warning btn-sm">Editar</a>
+        <form method="post" action="{{ url_for('admin.eliminar_zapatilla', id=z[0]) }}" style="display:inline">
+          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar?')">Eliminar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
