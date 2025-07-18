@@ -1,5 +1,4 @@
-
-{% extends 'layout.html' %}
+{% extends 'app.html' %}
 {% block content %}
 <h2>Editar Usuario</h2>
 <form method="post">
@@ -22,8 +21,8 @@
   <div class="mb-3">
     <label>Rol</label>
     <select name="rol" class="form-control">
-      <option value="USER" {% if usuario[5] == 'USER' %}selected{% endif %}>USER</option>
-      <option value="ADMIN" {% if usuario[5] == 'ADMIN' %}selected{% endif %}>ADMIN</option>
+      <option value="USER" {% if usuario[5]=='USER' %}selected{% endif %}>USER</option>
+      <option value="ADMIN" {% if usuario[5]=='ADMIN' %}selected{% endif %}>ADMIN</option>
     </select>
   </div>
   <button type="submit" class="btn btn-primary">Guardar Cambios</button>

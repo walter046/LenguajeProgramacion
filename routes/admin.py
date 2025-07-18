@@ -1,17 +1,26 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from functools import wraps
-from app import mysql
+from extensions import mysql
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if 'usuario_id' not in session or session.get('rol') != 'ADMIN':
-            flash("Acceso denegado. Se requiere rol ADMIN.")
-            return redirect(url_for('index'))
+        print("DEBUG - Session data:", session)  # Verifica los datos de sesión
+        print("DEBUG - Rol:", session.get('usuario_rol'))
+        # Verifica tanto la sesión como el rol
+        if not session.get('usuario_id'):
+            flash("Debes iniciar sesión para acceder a esta área", "error")
+            return redirect(url_for('auth.login'))
+        
+        if session.get('usuario_rol') != 'ADMIN':
+            flash("Acceso denegado. Se requieren privilegios de administrador", "error")
+            return redirect(url_for('main.index'))
+        
         return f(*args, **kwargs)
     return decorated_function
+
 
 # === CRUD ZAPATILLAS ===
 

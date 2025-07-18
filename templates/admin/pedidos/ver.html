@@ -1,5 +1,4 @@
-
-{% extends 'layout.html' %}
+{% extends 'app.html' %}
 {% block content %}
 <h2>Detalles del Pedido #{{ pedido[0] }}</h2>
 <p><strong>Cliente:</strong> {{ pedido[1] }}</p>
@@ -11,7 +10,7 @@
   <label>Cambiar estado:</label>
   <select name="estado" class="form-control">
     {% for estado in ['pendiente','pagado','enviado','entregado','cancelado'] %}
-      <option value="{{ estado }}" {% if pedido[3] == estado %}selected{% endif %}>{{ estado|capitalize }}</option>
+    <option value="{{ estado }}" {% if pedido[3]==estado %}selected{% endif %}>{{ estado|capitalize }}</option>
     {% endfor %}
   </select>
   <button type="submit" class="btn btn-primary mt-2">Actualizar Estado</button>
@@ -21,7 +20,9 @@
 <table class="table table-sm table-striped">
   <thead>
     <tr>
-      <th>Producto</th><th>Cantidad</th><th>Precio Unitario</th>
+      <th>Producto</th>
+      <th>Cantidad</th>
+      <th>Precio Unitario</th>
     </tr>
   </thead>
   <tbody>

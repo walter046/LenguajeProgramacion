@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, url_for, session, flash, render_template, request
 from forms import RegisterForm, LoginForm
-from extensions import mysql, limiter
+from extensions import mysql
 import bcrypt
 
 auth_bp = Blueprint('auth', __name__)
@@ -41,7 +41,6 @@ def register():
 
 # Ruta de inicio de sesión
 @auth_bp.route('/login', methods=['GET', 'POST'])
-@limiter.limit("15 per minute")
 def login():
     form = LoginForm()
     
@@ -52,7 +51,7 @@ def login():
             password = form.password.data
             
             cursor = mysql.connection.cursor()
-            cursor.execute("SELECT id, nombre, password FROM usuarios WHERE username = %s", (username,))
+            cursor.execute("SELECT id, nombre, rol, password FROM usuarios WHERE username = %s", (username,))
             usuario = cursor.fetchone()
             cursor.close()
             
@@ -68,6 +67,7 @@ def login():
                 session['usuario_id'] = usuario['id']
                 session['usuario_nombre'] = usuario['nombre']
                 session['usuario_username'] = username
+                session['usuario_rol'] = usuario['rol']
                 flash(f"Bienvenido, {usuario['nombre']}!", "success")
                 
                 next_page = request.args.get('next')

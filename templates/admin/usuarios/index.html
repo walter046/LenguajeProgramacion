@@ -1,21 +1,32 @@
-
-{% extends 'layout.html' %}
+{% extends 'app.html' %}
 {% block content %}
 <h2>Usuarios</h2>
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>ID</th><th>Nombre</th><th>Correo</th><th>Dirección</th><th>Teléfono</th><th>Rol</th><th>Acciones</th>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Correo</th>
+      <th>Dirección</th>
+      <th>Teléfono</th>
+      <th>Rol</th>
+      <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
     {% for u in usuarios %}
     <tr>
-      <td>{{ u[0] }}</td><td>{{ u[1] }}</td><td>{{ u[2] }}</td><td>{{ u[3] }}</td><td>{{ u[4] }}</td><td>{{ u[5] }}</td>
+      <td>{{ u[0] }}</td>
+      <td>{{ u[1] }}</td>
+      <td>{{ u[2] }}</td>
+      <td>{{ u[3] }}</td>
+      <td>{{ u[4] }}</td>
+      <td>{{ u[5] }}</td>
       <td>
         <a href="{{ url_for('admin.editar_usuario', id=u[0]) }}" class="btn btn-warning btn-sm">Editar</a>
         <form method="post" action="{{ url_for('admin.eliminar_usuario', id=u[0]) }}" style="display:inline">
-          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este usuario?')">Eliminar</button>
+          <button type="submit" class="btn btn-danger btn-sm"
+            onclick="return confirm('¿Eliminar este usuario?')">Eliminar</button>
         </form>
       </td>
     </tr>
