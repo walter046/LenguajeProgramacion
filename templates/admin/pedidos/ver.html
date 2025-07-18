@@ -1,0 +1,38 @@
+
+{% extends 'layout.html' %}
+{% block content %}
+<h2>Detalles del Pedido #{{ pedido[0] }}</h2>
+<p><strong>Cliente:</strong> {{ pedido[1] }}</p>
+<p><strong>Total:</strong> S/. {{ pedido[2] }}</p>
+<p><strong>Estado actual:</strong> {{ pedido[3] }}</p>
+<p><strong>Fecha:</strong> {{ pedido[4] }}</p>
+
+<form method="post" action="{{ url_for('admin.cambiar_estado_pedido', id=pedido[0]) }}" class="mb-4">
+  <label>Cambiar estado:</label>
+  <select name="estado" class="form-control">
+    {% for estado in ['pendiente','pagado','enviado','entregado','cancelado'] %}
+      <option value="{{ estado }}" {% if pedido[3] == estado %}selected{% endif %}>{{ estado|capitalize }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn btn-primary mt-2">Actualizar Estado</button>
+</form>
+
+<h4>Productos:</h4>
+<table class="table table-sm table-striped">
+  <thead>
+    <tr>
+      <th>Producto</th><th>Cantidad</th><th>Precio Unitario</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for d in detalles %}
+    <tr>
+      <td>{{ d[2] }}</td>
+      <td>{{ d[0] }}</td>
+      <td>S/. {{ d[1] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{{ url_for('admin.lista_pedidos') }}" class="btn btn-secondary">Volver</a>
+{% endblock %}
