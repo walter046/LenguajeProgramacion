@@ -1,0 +1,299 @@
+{% extends 'app.html' %}
+{% block title %}Mis Pedidos{% endblock %}
+
+{% block customCSS %}
+<style>
+  .pedido-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+  }
+  .pedido-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .estado-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .estado-pendiente { background: #fef3c7; color: #92400e; }
+  .estado-confirmado { background: #dbeafe; color: #1e40af; }
+  .estado-enviado { background: #d1fae5; color: #065f46; }
+  .estado-entregado { background: #dcfce7; color: #166534; }
+  .estado-cancelado { background: #fee2e2; color: #991b1b; }
+</style>
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Mis Pedidos</h1>
+    <a
+      href="{{ url_for('main.novedades') }}"
+      class="text-blue-600 hover:text-blue-700 font-medium"
+    >
+      ← Ir a Comprar
+    </a>
+  </div>
+
+  <div id="notification-container" class="fixed bottom-4 right-4 z-[100] space-y-2 w-full max-w-xs"></div>
+
+  <!-- aqui podenmos navegar entre pedidos y el carrito -->
+  <div class="mb-6">
+    <div class="border-b border-gray-200">
+      <nav class="-mb-px flex space-x-8">
+        <button
+          id="tab-pedidos"
+          class="tab-btn py-2 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600"
+        >
+          Pedidos Realizados
+        </button>
+        <button
+          id="tab-carritos"
+          class="tab-btn py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700"
+        >
+          Carritos Guardados
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Sección de Pedidos -->
+  <div id="seccion-pedidos" class="tab-content">
+    {% if pedidos %}
+      <div class="space-y-4">
+        {% for pedido in pedidos %}
+        <div class="pedido-card">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">
+                Pedido #{{ pedido.id_pedido }}
+              </h3>
+              <p class="text-sm text-gray-600">
+                {{ pedido.fecha_pedido.strftime('%d/%m/%Y %H:%M') if pedido.fecha_pedido else 'Fecha no disponible' }}
+              </p>
+            </div>
+            <div class="flex items-center space-x-4">
+              <span class="estado-badge estado-{{ pedido.estado }}">
+                {{ pedido.estado.title() }}
+              </span>
+              <span class="text-lg font-bold text-gray-900">
+                S/ {{ "%.2f"|format(pedido.total) }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <p class="text-sm text-gray-600">Dirección de envío:</p>
+              <p class="text-gray-900">{{ pedido.direccion_envio or 'No especificada' }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Teléfono:</p>
+              <p class="text-gray-900">{{ pedido.telefono or 'No especificado' }}</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">
+              {{ pedido.num_items }} producto(s)
+            </span>
+            {% if pedido.estado in ['pendiente', 'confirmado'] %}
+            <button
+              onclick="cancelarPedido({{ pedido.id_pedido }})"
+              class="text-red-600 hover:text-red-700 text-sm font-medium"
+            >
+              Cancelar Pedido
+            </button>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-12">
+        <i class="fas fa-shopping-bag text-6xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">No tienes pedidos aún</h3>
+        <p class="text-gray-500 mb-6">Realiza tu primera compra para ver tus pedidos aquí</p>
+        <a href="{{ url_for('main.novedades') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+          Ir a Comprar
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Sección de Carritos Guardados -->
+  <div id="seccion-carritos" class="tab-content hidden">
+    {% if historial_carritos %}
+      <div class="space-y-4">
+        {% for carrito in historial_carritos %}
+        <div class="pedido-card">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">
+                Carrito Guardado
+              </h3>
+              <p class="text-sm text-gray-600">
+                {{ carrito.fecha_creacion.strftime('%d/%m/%Y %H:%M') if carrito.fecha_creacion else 'Fecha no disponible' }}
+              </p>
+            </div>
+            <button
+              onclick="cargarCarritoGuardado('{{ carrito.carrito_data }}')"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            >
+              Cargar Carrito
+            </button>
+          </div>
+          
+          <div class="text-sm text-gray-600">
+            <p>Productos guardados en el carrito</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-12">
+        <i class="fas fa-save text-6xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-600 mb-2">No tienes carritos guardados</h3>
+        <p class="text-gray-500 mb-6">Guarda tu carrito para acceder a él más tarde</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tabPedidos = document.getElementById("tab-pedidos");
+  const tabCarritos = document.getElementById("tab-carritos");
+  const seccionPedidos = document.getElementById("seccion-pedidos");
+  const seccionCarritos = document.getElementById("seccion-carritos");
+
+  // Función para cambiar tab
+  function cambiarTab(tabActivo, seccionActiva) {
+    // Remover clases activas de todos los tabs
+    [tabPedidos, tabCarritos].forEach(tab => {
+      tab.classList.remove("border-blue-500", "text-blue-600");
+      tab.classList.add("border-transparent", "text-gray-500");
+    });
+    
+    // Ocultamos todas las secciones
+    [seccionPedidos, seccionCarritos].forEach(seccion => {
+      seccion.classList.add("hidden");
+    });
+    tabActivo.classList.remove("border-transparent", "text-gray-500");
+    tabActivo.classList.add("border-blue-500", "text-blue-600");
+    
+    seccionActiva.classList.remove("hidden");
+  }
+
+  // Event listeners para tabs
+  tabPedidos.addEventListener("click", () => cambiarTab(tabPedidos, seccionPedidos));
+  tabCarritos.addEventListener("click", () => cambiarTab(tabCarritos, seccionCarritos));
+
+  // Función para mostrar notificaciones
+  function showNotification(message, type = "info") {
+    const container = document.getElementById("notification-container");
+    const notification = document.createElement("div");
+    notification.className = `notification p-4 rounded-lg shadow-lg border-l-4 transition-all duration-300 transform translate-x-full opacity-0 ${getNotificationStyles(type)}`;
+    notification.innerHTML = `
+      <div class="flex items-center">
+        <div class="flex-shrink-0">${getNotificationIcon(type)}</div>
+        <div class="ml-3 flex-1"><p class="text-sm font-medium">${message}</p></div>
+        <div class="ml-3 flex-shrink-0">
+          <button onclick="this.parentElement.parentElement.classList.add('translate-x-full', 'opacity-0'); setTimeout(() => this.parentElement.parentElement.remove(), 300);" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>`;
+    container.appendChild(notification);
+    setTimeout(() => {
+      notification.classList.remove("translate-x-full", "opacity-0");
+    }, 50);
+    setTimeout(() => {
+      notification.classList.add("translate-x-full", "opacity-0");
+      setTimeout(() => notification.remove(), 300);
+    }, 5000);
+  }
+
+  function getNotificationStyles(type) {
+    const styles = {
+      success: "bg-green-50 border-green-400 text-green-800",
+      error: "bg-red-50 border-red-400 text-red-800",
+      info: "bg-blue-50 border-blue-400 text-blue-800",
+    };
+    return styles[type] || styles["info"];
+  }
+
+  function getNotificationIcon(type) {
+    const icons = {
+      success: '<svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>',
+      error: '<svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>',
+      info: '<svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>',
+    };
+    return icons[type] || icons["info"];
+  }
+
+  // Función para poder    cancelar pedido
+  window.cancelarPedido = async function(pedidoId) {
+    if (!confirm('¿Estás seguro de que quieres cancelar este pedido?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/cancelar_pedido/${pedidoId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
+        showNotification(result.message, "success");
+        // Recargar la página para actualizar el estado
+        setTimeout(() => location.reload(), 1500);
+      } else {
+        showNotification(result.message || "Error al cancelar el pedido", "error");
+      }
+    } catch (error) {
+      console.error("Error al cancelar pedido:", error);
+      showNotification("Error de conexión", "error");
+    }
+  };
+
+  // Función para cargar carrito guardado
+  window.cargarCarritoGuardado = async function(carritoData) {
+    try {
+      const carrito = JSON.parse(carritoData);
+      
+      // Guardar en la sesión actual
+      const response = await fetch("/guardar_carrito_actual", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ carrito: carrito }),
+      });
+      
+      if (response.ok) {
+        showNotification("Carrito cargado correctamente", "success");
+        // Redirigir al carrito
+        setTimeout(() => {
+          window.location.href = "{{ url_for('main.carrito') }}";
+        }, 1500);
+      } else {
+        showNotification("Error al cargar el carrito", "error");
+      }
+    } catch (error) {
+      console.error("Error al cargar carrito guardado:", error);
+      showNotification("Error al cargar el carrito", "error");
+    }
+  };
+});
+</script>
+
+{% endblock %} 
