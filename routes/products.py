@@ -55,11 +55,11 @@ def detalle_products(producto_id):
 
     if producto:
         producto_dict = {
-            'id': p['id'],
-            'nombre': p['nombre'],
-            'descripcion': p['descripcion'],
-            'precio': float(p['precio']),
-            'imagen': p['imagen_url']
+            'id': producto['id'],
+            'nombre': producto['nombre'],
+            'descripcion': producto['descripcion'],
+            'precio': float(producto['precio']),
+            'imagen': producto['imagen_url']
         }
         return render_template('detalle_products.html', producto=producto_dict)
     else:

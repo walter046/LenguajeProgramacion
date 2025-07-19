@@ -39,6 +39,9 @@ from routes.products import products_bp
 app.register_blueprint(products_bp)
 
 
+from routes.cartv2 import cartv2_bp
+app.register_blueprint(cartv2_bp)
+
 if __name__ == '__main__':
     app.run(debug=True)
 

@@ -1,0 +1,48 @@
+{% extends 'app.html' %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-4">Método de Pago</h1>
+
+    <div class="mb-6">
+        <p class="text-xl font-semibold">Total: ${{ total }}</p>
+    </div>
+
+    <div id="paypal-button-container"></div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=Abg4b8sFLI31Qe5J_MHBrVya9Itvj6Mte0d7wzRpBrTD_hPZfRWmivQxNObfZJhjPf_6VP10NdNt4Za6&currency=USD"></script>
+<script>
+    paypal.Buttons({
+        createOrder: function(data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: '{{ total }}'
+                    }
+                }]
+            });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                fetch("{{ url_for('cartv2.confirm_payment') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        orderID: data.orderID,
+                        payer: details.payer
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert("Pago realizado con éxito");
+                    window.location.href = "{{ url_for('products.products') }}";
+                });
+            });
+        }
+    }).render('#paypal-button-container');
+</script>
+{% endblock %}
