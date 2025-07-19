@@ -34,6 +34,7 @@ app.register_blueprint(pedidos_bp)
 from routes.admin import admin_bp
 app.register_blueprint(admin_bp)
 
+# Rutas de productos
 from routes.products import products_bp
 app.register_blueprint(products_bp)
 

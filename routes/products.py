@@ -37,11 +37,11 @@ def products():
     cursor.close()
 
     lista_productos = [{
-        'id': p['0'],
-        'nombre': p['1'],
-        'descripcion': p['2'],
-        'precio': float(p['3']),
-        'imagen': p['4']
+        'id': p['id'],
+        'nombre': p['nombre'],
+        'descripcion': p['descripcion'],
+        'precio': float(p['precio']),
+        'imagen': p['imagen_url']
     } for p in productos]
 
     return render_template('products.html', productos=lista_productos)
@@ -55,11 +55,11 @@ def detalle_products(producto_id):
 
     if producto:
         producto_dict = {
-            'id': producto['0'],
-            'nombre': producto['1'],
-            'descripcion': producto['2'],
-            'precio': float(producto['3']),
-            'imagen': producto['4']
+            'id': p['id'],
+            'nombre': p['nombre'],
+            'descripcion': p['descripcion'],
+            'precio': float(p['precio']),
+            'imagen': p['imagen_url']
         }
         return render_template('detalle_products.html', producto=producto_dict)
     else:
