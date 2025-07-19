@@ -1,10 +1,132 @@
 {% extends 'app.html' %}
-{% block title %}Productos{% endblock %} 
+{% block title %}Productos{% endblock %}
 
 {% block customCSS %}
 {% endblock %}
 
 {% block content %}
-<h2 class="text-2xl font-bold mb-4">Catálogo de Productos</h2>
-<p>Aquí irán los productos de la tienda.</p>
+<div class="p-6 relative">
+    <!-- Carrusel -->
+    <div class="overflow-hidden whitespace-nowrap bg-gradient-to-r from-blue-100 to-blue-200 py-2 rounded shadow mb-6">
+        <div class="animate-marquee inline-block text-lg font-semibold text-blue-800 px-4 tracking-wide">
+            ¡A toda potencia! — Corre con estilo — Zapatillas edición limitada — Comodidad y rendimiento — Diseñadas para ti — ⚡
+        </div>
+    </div>
+
+    <!-- Botón para abrir filtros -->
+    <div class="flex justify-start mb-4">
+        <button onclick="toggleFiltro()"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-semibold">
+            Filtrar
+        </button>
+    </div>
+
+    <!-- Panel de filtros deslizante desde la izquierda -->
+    <div id="filtroPanel"
+        class="fixed top-0 left-0 h-full w-80 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-50 p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-blue-700">Filtros</h3>
+            <button onclick="toggleFiltro()" class="text-gray-600 hover:text-red-500 text-2xl">&times;</button>
+        </div>
+
+        <form method="GET" action="/products" class="space-y-5">
+            <!-- Género -->
+            <div>
+                <label class="block text-sm font-semibold">Género</label>
+                <select name="genero" class="w-full px-3 py-2 border rounded">
+                    <option value="">Todos</option>
+                    <option value="hombre">Hombre</option>
+                    <option value="mujer">Mujer</option>
+                    <option value="niño">Niño</option>
+                </select>
+            </div>
+
+            <!-- Tipo -->
+            <div>
+                <label class="block text-sm font-semibold">Tipo</label>
+                <select name="tipo" class="w-full px-3 py-2 border rounded">
+                    <option value="">Todos</option>
+                    <option value="zapatilla">Zapatilla</option>
+                    <option value="zapato">Zapato</option>
+                </select>
+            </div>
+
+            <!-- Precio -->
+            <div>
+                <label class="block text-sm font-semibold">Precio máximo</label>
+                <div class="flex items-center gap-2">
+                    <input id="precioRange" type="range" min="0" max="500" step="10"
+                        class="w-full accent-blue-600" oninput="precioInput.value = this.value">
+                    <input id="precioInput" name="precio" type="number" min="0" max="500"
+                        class="w-20 px-2 py-1 border rounded text-right" value="250"
+                        oninput="precioRange.value = this.value">
+                </div>
+            </div>
+
+            <!-- Colaboración -->
+            <div>
+                <label class="block text-sm font-semibold">Colaboración</label>
+                <input type="text" name="colaboracion" placeholder="Ej. Nike x Travis"
+                    class="w-full px-3 py-2 border rounded">
+            </div>
+
+            <!-- Tallas -->
+            <div>
+                <label class="block text-sm font-semibold">Tallas</label>
+                <div class="grid grid-cols-4 gap-2">
+                    {% for talla in ['36', '37', '38', '39', '40', '41', '42', '43'] %}
+                    <label class="text-center text-sm font-medium border rounded px-2 py-1 cursor-pointer">
+                        <input type="checkbox" name="tallas" value="{{ talla }}" class="mr-1">
+                        {{ talla }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold transition">
+                Aplicar Filtros
+            </button>
+        </form>
+    </div>
+
+    <!-- Productos -->
+    <main class="flex-1">
+    <h2 class="text-2xl font-bold mb-4">Catálogo de Productos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for producto in productos %}
+        <a href="{{ url_for('products.detalle_products', producto_id=producto['id']) }}" class="block">
+        <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
+        <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}"
+            class="w-full h-48 object-cover rounded mb-2">
+        <h3 class="text-lg font-bold">{{ producto.nombre }}</h3>
+        <p class="text-gray-500 text-sm">{{ producto.descripcion }}</p>
+        <p class="text-blue-600 font-bold mt-2">${{ producto.precio }}</p>
+        </div>
+         </a>
+        {% else %}
+        <p class="text-gray-600">No se encontraron productos.</p>
+        {% endfor %}
+    </div>
+</main>
+</div>
+
+<!-- Script para mostrar/ocultar el panel -->
+<script>
+    function toggleFiltro() {
+        const panel = document.getElementById('filtroPanel');
+        panel.classList.toggle('-translate-x-full');
+    }
+</script>
+
+<!-- Carrusel animado -->
+<style>
+@keyframes marquee {
+    0% { transform: translateX(100%) }
+    100% { transform: translateX(-100%) }
+}
+.animate-marquee {
+    animation: marquee 15s linear infinite;
+}
+</style>
 {% endblock %}

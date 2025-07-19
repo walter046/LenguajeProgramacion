@@ -34,5 +34,10 @@ app.register_blueprint(pedidos_bp)
 from routes.admin import admin_bp
 app.register_blueprint(admin_bp)
 
+from routes.products import products_bp
+app.register_blueprint(products_bp)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+
