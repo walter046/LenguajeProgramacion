@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <title>{% block title %}{% endblock %}</title>
   {% block customCSS %}
@@ -23,7 +24,7 @@
           <div class="hidden md:flex space-x-6">
             <a href="{{ url_for('main.index') }}"
               class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Inicio</a>
-            <a href="{{ url_for('main.products') }}"
+            <a href="{{ url_for('products.products') }}"
               class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Productos</a>
             <a href="{{url_for('main.novedades')}}"
               class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Novedades</a>
@@ -158,10 +159,11 @@
           <div class="mt-4">
             <h5 class="font-bold mb-2">Métodos de Pago</h5>
             <div class="flex flex-wrap gap-2">
-              <img src="https://via.placeholder.com/40x25?text=Visa" alt="Visa" class="h-6" />
-              <img src="https://via.placeholder.com/40x25?text=MC" alt="Mastercard" class="h-6" />
-              <img src="https://via.placeholder.com/40x25?text=PayPal" alt="PayPal" class="h-6" />
-              <img src="https://via.placeholder.com/40x25?text=Plin" alt="Plin" class="h-6" />
+              <img src="https://1000marcas.net/wp-content/uploads/2019/12/VISA-Logo.png" alt="Visa" class="h-6" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/MasterCard_early_1990s_logo.png/1200px-MasterCard_early_1990s_logo.png" alt="Mastercard" class="h-6" />
+              <img src="https://addonmall.com/assets/uploads/2018/09/paypal-784404_1280-1.png" alt="PayPal" class="h-6" />
+              <img src="https://marketing-peru.beglobal.biz/wp-content/uploads/2024/09/logo-plin-fondo-transparente.png" alt="Plin" class="h-6" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Icono_de_la_aplicaci%C3%B3n_Yape.png" alt="Yape" class="h-6" />
             </div>
           </div>
         </div>
