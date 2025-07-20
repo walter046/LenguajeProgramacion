@@ -1,375 +1,40 @@
 {% extends 'app.html' %}
-{% block title %}Mi Carrito{% endblock %}
 
-{% block customCSS %}
-<style>
-  .cart-item {
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 16px;
-    background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  .quantity-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .quantity-btn {
-    width: 32px;
-    height: 32px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    background: white;
-    color: #374151;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .quantity-btn:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
-  }
-  .remove-btn {
-    color: #ef4444;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: background-color 0.2s;
-  }
-  .remove-btn:hover {
-    background: #fef2f2;
-  }
-</style>
-{% endblock %}
+{% block title %}Carrito de Compras{% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto px-4 py-8">
-  <div class="flex items-center justify-between mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">Mi Carrito de Compras</h1>
-    <a
-      href="{{ url_for('main.novedades') }}"
-      class="text-blue-600 hover:text-blue-700 font-medium"
-    >
-      ← Continuar Comprando
-    </a>
-  </div>
+<div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Carrito de Compras</h1>
 
-  <div id="notification-container" class="fixed bottom-4 right-4 z-[100] space-y-2 w-full max-w-xs"></div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- Lista de productos del carrito -->
-    <div class="lg:col-span-2">
-      <div id="cart-items-container">
-        <!-- Los items del carrito se cargarán aquí -->
-        <div class="text-center py-12">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p class="mt-4 text-gray-600">Cargando carrito...</p>
-        </div>
-      </div>
-    </div>
-
-    <!--mostrara el Resumen del pedido -->
-    <div class="lg:col-span-1">
-      <div class="bg-white rounded-lg shadow-md p-6 sticky top-24">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Resumen del Pedido</h2>
-        
-        <div class="space-y-3 mb-6">
-          <div class="flex justify-between text-gray-600">
-            <span>Subtotal:</span>
-            <span id="subtotal">S/ 0.00</span>
-          </div>
-          <div class="flex justify-between text-gray-600">
-            <span>Envío:</span>
-            <span id="shipping">S/ 0.00</span>
-          </div>
-          <hr class="border-gray-200">
-          <div class="flex justify-between text-lg font-bold text-gray-900">
-            <span>Total:</span>
-            <span id="total">S/ 0.00</span>
-          </div>
-        </div>
-
-        <button
-          id="checkout-btn"
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled
-        >
-          Proceder al Pago
-        </button>
-
-        <div class="mt-4 space-y-2">
-          <button
-            id="save-cart-btn"
-            class="w-full bg-green-600 hover:bg-green-700 text-white text-center py-2 rounded-lg transition-colors text-sm font-medium"
-          >
-            Guardar Carrito
-          </button>
-          <button
-            id="clear-cart-btn"
-            class="w-full text-red-600 hover:text-red-700 text-sm font-medium"
-          >
-            Vaciar Carrito
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const cartItemsContainer = document.getElementById("cart-items-container");
-  const subtotalSpan = document.getElementById("subtotal");
-  const shippingSpan = document.getElementById("shipping");
-  const totalSpan = document.getElementById("total");
-  const checkoutBtn = document.getElementById("checkout-btn");
-  const clearCartBtn = document.getElementById("clear-cart-btn");
-  const saveCartBtn = document.getElementById("save-cart-btn");
-
-  // Función para mostrar notificaciones
-  function showNotification(message, type = "info") {
-    const container = document.getElementById("notification-container");
-    const notification = document.createElement("div");
-    notification.className = `notification p-4 rounded-lg shadow-lg border-l-4 transition-all duration-300 transform translate-x-full opacity-0 ${getNotificationStyles(type)}`;
-    notification.innerHTML = `
-      <div class="flex items-center">
-        <div class="flex-shrink-0">${getNotificationIcon(type)}</div>
-        <div class="ml-3 flex-1"><p class="text-sm font-medium">${message}</p></div>
-        <div class="ml-3 flex-shrink-0">
-          <button onclick="this.parentElement.parentElement.classList.add('translate-x-full', 'opacity-0'); setTimeout(() => this.parentElement.parentElement.remove(), 300);" class="text-gray-400 hover:text-gray-600">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-          </button>
-        </div>
-      </div>`;
-    container.appendChild(notification);
-    setTimeout(() => {
-      notification.classList.remove("translate-x-full", "opacity-0");
-    }, 50);
-    setTimeout(() => {
-      notification.classList.add("translate-x-full", "opacity-0");
-      setTimeout(() => notification.remove(), 300);
-    }, 5000);
-  }
-
-  function getNotificationStyles(type) {
-    const styles = {
-      success: "bg-green-50 border-green-400 text-green-800",
-      error: "bg-red-50 border-red-400 text-red-800",
-      info: "bg-blue-50 border-blue-400 text-blue-800",
-    };
-    return styles[type] || styles["info"];
-  }
-
-  function getNotificationIcon(type) {
-    const icons = {
-      success: '<svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>',
-      error: '<svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>',
-      info: '<svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>',
-    };
-    return icons[type] || icons["info"];
-  }
-
-  async function loadCart() {
-    try {
-      const response = await fetch("/get_cart");
-      const data = await response.json();
-      const cart = data.cart;
-
-      if (Object.keys(cart).length === 0) {
-        cartItemsContainer.innerHTML = `
-          <div class="text-center py-12">
-            <i class="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
-            <h3 class="text-xl font-semibold text-gray-600 mb-2">Tu carrito está vacío</h3>
-            <p class="text-gray-500 mb-6">Añade algunos productos para comenzar</p>
-            <a href="{{ url_for('main.novedades') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
-              Ir a Comprar
-            </a>
-          </div>
-        `;
-        updateTotals(0, 0);
-        checkoutBtn.disabled = true;
-        return;
-      }
-
-      let subtotal = 0;
-      let html = '';
-
-      for (const id in cart) {
-        const item = cart[id];
-        const itemTotal = item.precio * item.cantidad;
-        subtotal += itemTotal;
-
-        html += `
-          <div class="cart-item" data-id="${id}">
-            <div class="flex items-start">
-              <img src="${item.imagen || 'https://via.placeholder.com/80'}" alt="${item.nombre}" class="w-20 h-20 object-cover rounded-lg">
-              <div class="ml-4 flex-grow">
-                <h3 class="font-semibold text-gray-900">${item.nombre}</h3>
-                <p class="text-gray-600 text-sm">S/ ${item.precio.toFixed(2)}</p>
-                <div class="flex items-center justify-between mt-2">
-                  <div class="quantity-controls">
-                    <button class="quantity-btn decrease-quantity" data-id="${id}">
-                      <i class="fas fa-minus text-xs"></i>
-                    </button>
-                    <span class="quantity-display text-gray-700 font-medium">${item.cantidad}</span>
-                    <button class="quantity-btn increase-quantity" data-id="${id}">
-                      <i class="fas fa-plus text-xs"></i>
-                    </button>
-                  </div>
-                  <div class="flex items-center space-x-4">
-                    <span class="text-lg font-bold text-gray-900">S/ ${itemTotal.toFixed(2)}</span>
-                    <button class="remove-btn remove-item" data-id="${id}">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
+    {% if productos %}
+        <div class="grid gap-4">
+            {% for producto in productos %}
+                <div class="bg-white rounded shadow p-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" class="w-24 h-24 object-cover rounded">
+                        <div>
+                            <h2 class="text-xl font-semibold">{{ producto.nombre }}</h2>
+                            <p class="text-gray-600">{{ producto.descripcion }}</p>
+                            <p class="text-blue-600 font-bold mt-2">${{ producto.precio }}</p>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('cart.remove_from_cart', producto_id=producto.id) }}"
+                       class="text-red-500 hover:underline">Eliminar</a>
                 </div>
-              </div>
-            </div>
-          </div>
-        `;
-      }
+            {% endfor %}
+        </div>
+        <div class="mt-6 flex justify-between items-center">
+            <a href="{{ url_for('cart.clear_cart') }}"
+               class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">Vaciar carrito</a>
+            <a href="{{ url_for('cart.checkout') }}"
+   class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded">Proceder al pago</a>
 
-      cartItemsContainer.innerHTML = html;
-      updateTotals(subtotal, 0);
-      checkoutBtn.disabled = false;
+        </div>
+    {% else %}
+        <p class="text-gray-600">Tu carrito está vacío.</p>
+    {% endif %}
 
-      // Agregar event listeners
-      addCartEventListeners();
-
-    } catch (error) {
-      console.error("Error al cargar el carrito:", error);
-      showNotification("Error al cargar el carrito", "error");
-    }
-  }
-
-  function updateTotals(subtotal, shipping = 0) {
-    const total = subtotal + shipping;
-    subtotalSpan.textContent = `S/ ${subtotal.toFixed(2)}`;
-    shippingSpan.textContent = `S/ ${shipping.toFixed(2)}`;
-    totalSpan.textContent = `S/ ${total.toFixed(2)}`;
-  }
-
-  function addCartEventListeners() {
-    // Botones de cantidad
-    document.querySelectorAll('.decrease-quantity').forEach(button => {
-      button.addEventListener('click', async function() {
-        const id = this.getAttribute('data-id');
-        await updateCartItem(id, -1);
-      });
-    });
-
-    document.querySelectorAll('.increase-quantity').forEach(button => {
-      button.addEventListener('click', async function() {
-        const id = this.getAttribute('data-id');
-        await updateCartItem(id, 1);
-      });
-    });
-
-    // Botones de eliminar
-    document.querySelectorAll('.remove-item').forEach(button => {
-      button.addEventListener('click', async function() {
-        const id = this.getAttribute('data-id');
-        await removeCartItem(id);
-      });
-    });
-  }
-
-  async function updateCartItem(id, change) {
-    try {
-      const response = await fetch("/update_cart_item", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: id, change: change }),
-      });
-      const result = await response.json();
-      
-      if (response.ok && result.success) {
-        loadCart(); // Recargar el carrito
-        showNotification(result.message, "success");
-      } else {
-        showNotification(result.message || "Error al actualizar el carrito", "error");
-      }
-    } catch (error) {
-      console.error("Error al actualizar el item del carrito:", error);
-      showNotification("Error de conexión", "error");
-    }
-  }
-
-  async function removeCartItem(id) {
-    try {
-      const response = await fetch("/update_cart_item", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: id, change: -999 }), // Cantidad negativa grande para eliminar
-      });
-      const result = await response.json();
-      
-      if (response.ok && result.success) {
-        loadCart(); // Recargar el carrito
-        showNotification("Producto eliminado del carrito", "success");
-      } else {
-        showNotification(result.message || "Error al eliminar el producto", "error");
-      }
-    } catch (error) {
-      console.error("Error al eliminar el item del carrito:", error);
-      showNotification("Error de conexión", "error");
-    }
-  }
-
-  // Botón de guardar carrito
-  saveCartBtn.addEventListener('click', async function() {
-    try {
-      const response = await fetch("/guardar_carrito", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-      const result = await response.json();
-      
-      if (response.ok && result.success) {
-        showNotification("Carrito guardado correctamente", "success");
-      } else {
-        showNotification(result.message || "Error al guardar el carrito", "error");
-      }
-    } catch (error) {
-      console.error("Error al guardar el carrito:", error);
-      showNotification("Error de conexión", "error");
-    }
-  });
-
-  // Botón de vaciar carrito
-  clearCartBtn.addEventListener('click', async function() {
-    if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
-      try {
-        const response = await fetch("/clear_cart", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
-        const result = await response.json();
-        
-        if (response.ok && result.success) {
-          loadCart();
-          showNotification("Carrito vaciado", "success");
-        } else {
-          showNotification(result.message || "Error al vaciar el carrito", "error");
-        }
-      } catch (error) {
-        console.error("Error al vaciar el carrito:", error);
-        showNotification("Error de conexión", "error");
-      }
-    }
-  });
-
-  // Botón de proceder al pago
-  checkoutBtn.addEventListener('click', function() {
-    showNotification("Funcionalidad de pago en desarrollo", "info");
-  });
-
-  // Cargar el carrito al iniciar
-  loadCart();
-});
-</script>
-
-{% endblock %} 
+    <a href="{{ url_for('products.products') }}"
+       class="mt-6 inline-block text-blue-600 hover:underline">← Volver a productos</a>
+</div>
+{% endblock %}
