@@ -104,7 +104,7 @@
                     <p class="text-blue-600 font-bold mt-2">${{ producto.precio }}</p>
                 </a>
                 <!-- Agregar al carrito -->
-                <form action="{{ url_for('cartv2.add_to_cart', producto_id=producto['id']) }}" method="post">
+                <form action="{{ url_for('cart.add_to_cart', producto_id=producto['id']) }}" method="post">
     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Agregar al carrito</button>
 </form>
             </div>
@@ -116,7 +116,7 @@
 </div>
 
 <!-- Icono flotante del carrito -->
-<a href="{{ url_for('cartv2.view_cart') }}"
+<a href="{{ url_for('cart.view_cart') }}"
    class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition duration-300 z-50">
     🛒
 </a>

@@ -26,7 +26,7 @@
         },
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
-                fetch("{{ url_for('cartv2.confirm_payment') }}", {
+                fetch("{{ url_for('cart.confirm_payment') }}", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

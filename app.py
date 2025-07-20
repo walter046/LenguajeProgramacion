@@ -22,9 +22,6 @@ app.register_blueprint(user_bp)
 from routes.main import main_bp
 app.register_blueprint(main_bp)
 
-# Rutas de carrito
-from routes.cart import cart_bp
-app.register_blueprint(cart_bp)
 
 # Rutas de pedidos
 from routes.pedidos import pedidos_bp
@@ -39,8 +36,8 @@ from routes.products import products_bp
 app.register_blueprint(products_bp)
 
 
-from routes.cartv2 import cartv2_bp
-app.register_blueprint(cartv2_bp)
+from routes.cart import cart_bp
+app.register_blueprint(cart_bp)
 
 if __name__ == '__main__':
     app.run(debug=True)
