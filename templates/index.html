@@ -81,63 +81,16 @@
       .animate-fadeInUp.delay-300 {
         animation-delay: 0.3s;
       }
-
-      /* Degradado personalizado */
-      .bg-gradient-sneaker {
-        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
-      }
-    </style>
+</style>
 {% endblock %}
 
 {% block content %}
-<body class="bg-gradient-sneaker min-h-screen flex flex-col">
-    <!-- Mini carrito desplegable -->
-    <div
-      id="mini-cart"
-      class="fixed top-20 right-4 bg-white rounded-lg shadow-xl z-50 w-80 max-h-[70vh] overflow-y-auto hidden border border-gray-200"
-    >
-      <div class="p-4 border-b border-gray-200">
-        <h3
-          class="text-lg font-bold text-gray-800 flex items-center justify-between"
-        >
-          <span>Mi Carrito</span>
-          <button id="close-cart" class="text-gray-500 hover:text-gray-700">
-            <i class="fas fa-times"></i>
-          </button>
-        </h3>
-      </div>
-      <div id="cart-items" class="divide-y divide-gray-200">
-        <!-- Los items del carrito se agregarán aquí dinámicamente -->
-        <div class="p-4 text-center text-gray-500">
-          <i class="fas fa-shopping-cart text-3xl mb-2"></i>
-          <p>Tu carrito está vacío</p>
-        </div>
-      </div>
-      <div class="p-4 border-t border-gray-200 bg-gray-50">
-        <div class="flex justify-between mb-4">
-          <span class="font-bold">Total:</span>
-          <span id="cart-total" class="font-bold">S/ 0.00</span>
-        </div>
-        <a
-          href="#"
-          class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-2 rounded-lg transition-colors btn-primary"
-        >
-          Finalizar Compra
-        </a>
-      </div>
-    </div>
-
-    <!-- Contenedor de notificaciones -->
-    <div
-      id="notification-container"
-      class="fixed top-4 right-4 z-50 space-y-2"
-    ></div>
-
+<body class="bg-gray-100 min-h-screen flex flex-col">
     <!-- Hero Section mejorada -->
     <section class="relative bg-gray-900 text-white">
       <div class="absolute inset-0 overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+          src="https://images.pexels.com/photos/3480353/pexels-photo-3480353.jpeg"
           alt="Colección de zapatillas"
           class="w-full h-full object-cover opacity-70"
         />
@@ -146,30 +99,22 @@
         class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32"
       >
         <div class="max-w-2xl">
-          <h1 class="text-4xl md:text-5xl font-extrabold mb-6 animate-fadeInUp">
-            Descubre las mejores
-            <span class="text-blue-400">zapatillas</span> del mercado
+          <h1 class="text-4xl md:text-6xl font-extrabold mb-6 animate-fadeInUp uppercase">
+            Descubre las mejores zapatillas del mercado
           </h1>
           <p
-            class="text-lg md:text-xl mb-8 text-gray-300 animate-fadeInUp delay-100"
+            class="text-lg md:text-xl mb-8 text-gray-50 animate-fadeInUp delay-100"
           >
-            Encuentra el par perfecto para cada ocasión. Calidad premium, estilo
-            inigualable y comodidad excepcional.
+            Tus zapatillas soñadas, a un clic de distancia
           </p>
           <div
             class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 animate-fadeInUp delay-200"
           >
             <a
               href="{{ url_for('products.products') }}"
-              class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transform hover:scale-105 transition-all duration-300 text-center"
+              class="bg-black hover:bg-white hover:text-black text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transform hover:scale-105 transition-all duration-300 text-center"
             >
               Ver Colección
-            </a>
-            <a
-              href="#"
-              class="bg-transparent hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg text-lg border-2 border-white transition-all duration-300 text-center"
-            >
-              Ofertas Especiales
             </a>
           </div>
         </div>
@@ -178,308 +123,19 @@
 
     <!-- Sección de categorías mejorada -->
     <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">
-          Explora Nuestras Categorías
-        </h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Encuentra las zapatillas perfectas para cada estilo y ocasión
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <a
-          href="{{ url_for('main.category', name='hombre') }}"
-          class="group relative overflow-hidden rounded-xl shadow-lg h-80"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-            alt="Zapatillas para Hombre"
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-          <div
-            class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent flex items-end p-6"
-          >
-            <div>
-              <h3 class="text-2xl font-bold text-white mb-1">Hombre</h3>
-              <p class="text-gray-200">Estilo y rendimiento</p>
-            </div>
-          </div>
-        </a>
-
-        <a
-          href="{{ url_for('main.category', name='mujer') }}"
-          class="group relative overflow-hidden rounded-xl shadow-lg h-80"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-            alt="Zapatillas para Mujer"
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-          <div
-            class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent flex items-end p-6"
-          >
-            <div>
-              <h3 class="text-2xl font-bold text-white mb-1">Mujer</h3>
-              <p class="text-gray-200">Elegancia y comodidad</p>
-            </div>
-          </div>
-        </a>
-
-        <a
-          href="{{ url_for('main.category', name='ninos') }}"
-          class="group relative overflow-hidden rounded-xl shadow-lg h-80"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-            alt="Zapatillas para Niños"
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-          <div
-            class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent flex items-end p-6"
-          >
-            <div>
-              <h3 class="text-2xl font-bold text-white mb-1">Niños</h3>
-              <p class="text-gray-200">Diversión y calidad</p>
-            </div>
-          </div>
-        </a>
-      </div>
+      
     </section>
 
     <!-- Sección de productos destacados -->
     <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-8xl mx-auto">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">
-          Productos Destacados
-        </h2>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Los modelos más populares de esta temporada
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <!-- Producto 1 -->
-        <div
-          class="product-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
-        >
-          <div class="relative">
-            <img
-              src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80"
-              alt="Zapatilla Deportiva X"
-              class="w-full h-64 object-cover"
-            />
-            <div class="absolute top-2 right-2">
-              <span
-                class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full"
-                >NUEVO</span
-              >
-            </div>
-            <button
-              class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-blue-500 hover:text-white transition-colors"
-            >
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-          <div class="p-4">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-lg font-semibold text-gray-900">Air Max 270</h3>
-              <span class="text-sm text-gray-500">Nike</span>
-            </div>
-            <div class="flex items-center mb-3">
-              <div class="flex text-yellow-400">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-              </div>
-              <span class="text-xs text-gray-500 ml-1">(48)</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-xl font-bold text-blue-600">S/ 399.90</span>
-              <button
-                class="add-to-cart bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
-                data-id="1"
-                data-name="Air Max 270"
-                data-price="399.90"
-                data-image="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80"
-              >
-                <i class="fas fa-cart-plus mr-1"></i> Añadir
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Producto 2 -->
-        <div
-          class="product-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
-        >
-          <div class="relative">
-            <img
-              src="https://images.unsplash.com/photo-1543508282-6319a3e2621f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=715&q=80"
-              alt="Classic Leather"
-              class="w-full h-64 object-cover"
-            />
-            <button
-              class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-blue-500 hover:text-white transition-colors"
-            >
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-          <div class="p-4">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-lg font-semibold text-gray-900">
-                Classic Leather
-              </h3>
-              <span class="text-sm text-gray-500">Reebok</span>
-            </div>
-            <div class="flex items-center mb-3">
-              <div class="flex text-yellow-400">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="far fa-star"></i>
-              </div>
-              <span class="text-xs text-gray-500 ml-1">(32)</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-xl font-bold text-blue-600">S/ 279.90</span>
-              <button
-                class="add-to-cart bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
-                data-id="2"
-                data-name="Classic Leather"
-                data-price="279.90"
-                data-image="https://images.unsplash.com/photo-1543508282-6319a3e2621f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=715&q=80"
-              >
-                <i class="fas fa-cart-plus mr-1"></i> Añadir
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Producto 3 -->
-        <div
-          class="product-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
-        >
-          <div class="relative">
-            <img
-              src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-              alt="Ultraboost 22"
-              class="w-full h-64 object-cover"
-            />
-            <div class="absolute top-2 right-2">
-              <span
-                class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full"
-                >-20%</span
-              >
-            </div>
-            <button
-              class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-blue-500 hover:text-white transition-colors"
-            >
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-          <div class="p-4">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-lg font-semibold text-gray-900">Ultraboost 22</h3>
-              <span class="text-sm text-gray-500">Adidas</span>
-            </div>
-            <div class="flex items-center mb-3">
-              <div class="flex text-yellow-400">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <span class="text-xs text-gray-500 ml-1">(56)</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-xl font-bold text-blue-600">S/ 359.90</span>
-                <span class="text-sm text-gray-500 line-through ml-2"
-                  >S/ 449.90</span
-                >
-              </div>
-              <button
-                class="add-to-cart bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
-                data-id="3"
-                data-name="Ultraboost 22"
-                data-price="359.90"
-                data-image="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-              >
-                <i class="fas fa-cart-plus mr-1"></i> Añadir
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Producto 4 -->
-        <div
-          class="product-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
-        >
-          <div class="relative">
-            <img
-              src="https://images.unsplash.com/photo-1605408499391-6368c628ef42?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-              alt="Chuck Taylor All Star"
-              class="w-full h-64 object-cover"
-            />
-            <button
-              class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-blue-500 hover:text-white transition-colors"
-            >
-              <i class="fas fa-heart"></i>
-            </button>
-          </div>
-          <div class="p-4">
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="text-lg font-semibold text-gray-900">
-                Chuck Taylor All Star
-              </h3>
-              <span class="text-sm text-gray-500">Converse</span>
-            </div>
-            <div class="flex items-center mb-3">
-              <div class="flex text-yellow-400">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <span class="text-xs text-gray-500 ml-1">(72)</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-xl font-bold text-blue-600">S/ 249.90</span>
-              <button
-                class="add-to-cart bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm transition-colors"
-                data-id="4"
-                data-name="Chuck Taylor All Star"
-                data-price="249.90"
-                data-image="https://images.unsplash.com/photo-1605408499391-6368c628ef42?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-              >
-                <i class="fas fa-cart-plus mr-1"></i> Añadir
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="text-center mt-12">
-        <a
-          href="{{ url_for('products.products') }}"
-          class="inline-block bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors"
-        >
-          Ver Todos los Productos
-        </a>
-      </div>
+      
     </section>
 
     <!-- Sección de características -->
     <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div class="text-center mb-12">
         <h2 class="text-3xl font-bold text-gray-900 mb-4">
-          ¿Por qué elegir SneakerShop?
+          ¿Por qué elegir TheBox?
         </h2>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto">
           Ofrecemos la mejor experiencia de compra de zapatillas online
@@ -489,9 +145,9 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="bg-white p-6 rounded-lg shadow-sm text-center">
           <div
-            class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+            class="bg-gray-300 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
           >
-            <i class="fas fa-truck text-blue-600 text-2xl"></i>
+            <i class="fas fa-truck text-black text-2xl"></i>
           </div>
           <h3 class="text-xl font-bold text-gray-900 mb-2">Envío Rápido</h3>
           <p class="text-gray-600">
@@ -502,9 +158,9 @@
 
         <div class="bg-white p-6 rounded-lg shadow-sm text-center">
           <div
-            class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+            class="bg-gray-300 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
           >
-            <i class="fas fa-undo-alt text-blue-600 text-2xl"></i>
+            <i class="fas fa-undo-alt text-black text-2xl"></i>
           </div>
           <h3 class="text-xl font-bold text-gray-900 mb-2">
             Devoluciones Fáciles
@@ -516,9 +172,9 @@
 
         <div class="bg-white p-6 rounded-lg shadow-sm text-center">
           <div
-            class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+            class="bg-gray-300 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
           >
-            <i class="fas fa-shield-alt text-blue-600 text-2xl"></i>
+            <i class="fas fa-shield-alt text-black text-2xl"></i>
           </div>
           <h3 class="text-xl font-bold text-gray-900 mb-2">
             Productos Auténticos
@@ -534,7 +190,7 @@
     <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div class="text-center mb-12">
         <h2 class="text-3xl font-bold text-gray-900 mb-4">
-          Lo que dicen nuestros clientes
+          Nuestros Clientes
         </h2>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto">
           Experiencias reales de amantes de las zapatillas como tú
@@ -545,12 +201,12 @@
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
           <div class="flex items-center mb-4">
             <img
-              src="https://randomuser.me/api/portraits/women/43.jpg"
-              alt="María G."
+              src="https://sherpaday.com/wp-content/uploads/2023/12/andy-waak-2024.jpg"
+              alt="Andywaak"
               class="w-12 h-12 rounded-full mr-4"
             />
             <div>
-              <h4 class="font-bold text-gray-900">María G.</h4>
+              <h4 class="font-bold text-gray-900">Andywaak</h4>
               <div class="flex text-yellow-400">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -561,21 +217,19 @@
             </div>
           </div>
           <p class="text-gray-600">
-            "Las Ultraboost que compré son increíblemente cómodas. El envío fue
-            más rápido de lo esperado y el packaging muy cuidado. ¡Volveré a
-            comprar!"
+            "Las Nike Air Max 270 en color "Urban Black" combinan un diseño minimalista con detalles modernos. La silueta baja y la malla transpirable las hacen ideales para uso diario"
           </p>
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
           <div class="flex items-center mb-4">
             <img
-              src="https://randomuser.me/api/portraits/men/32.jpg"
-              alt="Carlos P."
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_J64H3ViHnb0kyiGdw2qSRVVGRd0LxbWqsA&s"
+              alt="Shaquille Boundil"
               class="w-12 h-12 rounded-full mr-4"
             />
             <div>
-              <h4 class="font-bold text-gray-900">Carlos P.</h4>
+              <h4 class="font-bold text-gray-900">Shaquille Boundil</h4>
               <div class="flex text-yellow-400">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -586,21 +240,19 @@
             </div>
           </div>
           <p class="text-gray-600">
-            "Excelente servicio al cliente. Tuve un problema con mi talla y me
-            lo resolvieron inmediatamente. Las Air Max son exactamente como en
-            las fotos."
+            "Compré las Nike Air Jordan 1 Retro en edición limitada y superaron todas mis expectativas. El envío llegó en 24 horas (¡súper rápido!), y la calidad es premium."
           </p>
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
           <div class="flex items-center mb-4">
             <img
-              src="https://randomuser.me/api/portraits/women/65.jpg"
-              alt="Lucía T."
+              src="https://mishoamoli.com/wp-content/uploads/2021/11/241863114_1960402657468350_2424300916312780707_n.jpg"
+              alt="Mishoamoli"
               class="w-12 h-12 rounded-full mr-4"
             />
             <div>
-              <h4 class="font-bold text-gray-900">Lucía T.</h4>
+              <h4 class="font-bold text-gray-900">Mishoamoli</h4>
               <div class="flex text-yellow-400">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -611,15 +263,14 @@
             </div>
           </div>
           <p class="text-gray-600">
-            "Compré las Converse para mi hija y le encantaron. La calidad es
-            excelente y el precio mejor que en otras tiendas. Muy recomendable."
+            "Las New Balance Fresh Foam 1080 son un game-changer para mis carreras. Livianas, con soporte lumbar. The Box incluso incluyó una guía de cuidados. Compra segura."
           </p>
         </div>
       </div>
     </section>
 
     <!-- Newsletter -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-blue-600 text-white">
+    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-100 via-gray-500 to-black text-white">
       <div class="max-w-4xl mx-auto text-center">
         <h2 class="text-3xl font-bold mb-4">Suscríbete a nuestro Newsletter</h2>
         <p class="text-lg mb-8 max-w-2xl mx-auto">
@@ -635,7 +286,7 @@
           />
           <button
             type="submit"
-            class="bg-white text-blue-600 font-bold px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors"
+            class="bg-black text-white font-bold px-6 py-3 rounded-lg hover:bg-white hover:text-black transition-colors"
           >
             Suscribirme
           </button>
