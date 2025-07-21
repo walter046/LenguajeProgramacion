@@ -8,15 +8,15 @@ main_bp = Blueprint('main', __name__)
 def index():
     return render_template('index.html')
 
-# Ruta para ofertas
-@main_bp.route('/ofertas')
-def ofertas():
-    return render_template('ofertas.html')
+# Ruta para marcas
+@main_bp.route('/marcas')
+def marcas():
+    return render_template('marcas.html')
 
-# Ruta para novedades
-@main_bp.route('/novedades')
-def novedades():
-    return render_template('novedades.html')
+# Ruta para locales
+@main_bp.route('/locales')
+def locales():
+    return render_template('locales.html')
 
 # Ruta para carrito
 @main_bp.route('/carrito')

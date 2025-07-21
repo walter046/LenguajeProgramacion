@@ -8,6 +8,36 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <title>{% block title %}TheBox{% endblock %}</title>
   {% block customCSS %}
+  <style>
+    /* Animaciones de entrada */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .animate-fadeInUp.delay-100 {
+      animation-delay: 0.1s;
+    }
+
+    .animate-fadeInUp.delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .animate-fadeInUp.delay-300 {
+      animation-delay: 0.3s;
+    }
+  </style>
   {% endblock %}
 </head>
 
@@ -24,24 +54,14 @@
           <div class="hidden md:flex space-x-7">
             <a href="{{ url_for('products.products') }}"
               class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Productos</a>
-            <a href="{{url_for('main.novedades')}}"
-              class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Novedades</a>
-            <a href="{{url_for('main.ofertas')}}"
-              class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Ofertas</a>
+            <a href="{{url_for('main.marcas')}}"
+              class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Marcas</a>
+              <a href="{{url_for('main.locales')}}"
+              class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Locales</a>
           </div>
         </div>
 
         <div class="flex items-center space-x-4">
-          <!-- Icono de carrito con contador -->
-          <div class="relative">
-            <button id="cart-toggle"
-              class="text-black hover:scale-105 transition ease-in-out p-2 rounded-full">
-              <i class="fas fa-shopping-cart text-xl"></i>
-              <span id="cart-count"
-                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
-            </button>
-          </div>
-
           {% if session.usuario_id %}
           <div class="relative group">
             <button
@@ -145,12 +165,12 @@
         <div>
           <h4 class="font-bold text-lg mb-4">Síguenos</h4>
           <div class="flex space-x-4">
-            <a href="https://www.facebook.com/TheBoxPeru/?locale=es_LA" class="text-gray-200 hover:text-white transition-colors text-xl"><i
-                class="fab fa-facebook-f"></i></a>
-            <a href="https://www.instagram.com/theboxperu/" class="text-gray-200 hover:text-white transition-colors text-xl"><i
-                class="fab fa-instagram"></i></a>
-            <a href="https://www.tiktok.com/@theboxperu" class="text-gray-200 hover:text-white transition-colors text-xl"><i
-                class="fab fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/TheBoxPeru/?locale=es_LA"
+              class="text-gray-200 hover:text-white transition-colors text-xl"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/theboxperu/"
+              class="text-gray-200 hover:text-white transition-colors text-xl"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@theboxperu"
+              class="text-gray-200 hover:text-white transition-colors text-xl"><i class="fab fa-tiktok"></i></a>
           </div>
           <div class="mt-4">
             <h5 class="font-bold mb-2">Métodos de Pago</h5>
