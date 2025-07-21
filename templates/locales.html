@@ -1,0 +1,99 @@
+{% extends 'app.html' %}
+
+{% block title %}
+Locales
+{% endblock %}
+
+{% block customCSS %}
+<style>
+    .mapa-gris {
+        filter: grayscale(100%);
+        transition: filter 0.3s ease;
+    }
+
+    .mapa-gris:hover {
+        filter: grayscale(0%);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<body>
+    <div class="bg-gray-100 flex flex-col justify-center items-center py-6">
+        <!-- Título principal -->
+        <h1
+            class="text-3xl md:text-5xl min-h-[150px] flex justify-center items-center font-extrabold my-6 p-6 uppercase">
+            Encuentra nuestros locales!
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-[70%]">
+            <!-- Local 1 -->
+            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-3">THE BOX Principal</h3>
+                <div class="mapa-gris overflow-hidden rounded-md">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7803.404022020599!2d-77.04478196651391!3d-12.064012240289506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c8e65528f277%3A0xa7147d5557bd5f7a!2sThe%20Box!5e0!3m2!1ses-419!2spe!4v1753087411449!5m2!1ses-419!2spe"
+                        width="100%" height="500" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade" class="rounded"></iframe>
+                </div>
+            </div>
+
+            <!-- Local 2 -->
+            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-3">THE BOX La Rambla San Borja</h3>
+                <div class="mapa-gris overflow-hidden rounded-md">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62425.27697514407!2d-77.05215267699647!3d-12.07240561795107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c77353b450c5%3A0xa56063bd559058cd!2sThe%20Box%20Store%20La%20Rambla%20San%20Borja!5e0!3m2!1ses-419!2spe!4v1753087431630!5m2!1ses-419!2spe"
+                        width="100%" height="500" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade" class="rounded"></iframe>
+                </div>
+            </div>
+
+            <!-- Local 3 -->
+            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-3">THE BOX San Isidro</h3>
+                <div class="mapa-gris overflow-hidden rounded-md">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62417.23584156776!2d-77.1118109783203!3d-12.106864699999987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c84735fe1325%3A0x593539d09ea67d84!2sThe%20Box%20San%20Isidro!5e0!3m2!1ses-419!2spe!4v1753087468487!5m2!1ses-419!2spe"
+                        width="100%" height="500" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade" class="rounded"></iframe>
+                </div>
+            </div>
+
+            <!-- Local 4 -->
+            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-3">THE BOX Real Plaza Puruchuco</h3>
+                <div class="mapa-gris overflow-hidden rounded-md">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62431.67386203998!2d-77.01671057548832!3d-12.044923351797275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c70cfc33e0b5%3A0x1590ea77843dfd38!2sThe%20Box%20Store%20Real%20Plaza%20Puruchuco!5e0!3m2!1ses-419!2spe!4v1753087502254!5m2!1ses-419!2spe"
+                        width="100%" height="500" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade" class="rounded"></iframe>
+                </div>
+            </div>
+
+            <!-- Local 5 -->
+            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-3">THE BOX Mall Aventura Plaza</h3>
+                <div class="mapa-gris overflow-hidden rounded-md">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62430.54168776892!2d-77.02254706230475!3d-12.049791889395047!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c76d901e2215%3A0xee03b76f4d7cb5b7!2sThe%20Box%20Big%20Store%20Mall%20Aventura%20Plaza%20Santa%20Anita!5e0!3m2!1ses-419!2spe!4v1753087515006!5m2!1ses-419!2spe"
+                        width="100%" height="500" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade" class="rounded"></iframe>
+                </div>
+            </div>
+
+            <!-- Local 6 -->
+            <div class="bg-gray-50 p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold mb-3">THE BOX Larcomar</h3>
+                <div class="mapa-gris overflow-hidden rounded-md">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62417.49463236636!2d-77.07650291838924!3d-12.105757195383179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105b7afa9f6cd89%3A0xa9d8199bfac72376!2sThe%20Box%20Store%20Larcomar!5e0!3m2!1ses-419!2spe!4v1753087525814!5m2!1ses-419!2spe"
+                        width="100%" height="500" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade" class="rounded"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

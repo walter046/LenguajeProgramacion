@@ -2,88 +2,6 @@
 
 {% block title %}SneakerShop - Tienda de Zapatillas Premium{% endblock %}
 
-{% block customCSS %}
-<style>
-      /* Animaciones y estilos personalizados */
-      .notification {
-        animation: slideIn 0.3s ease-out;
-      }
-      @keyframes slideIn {
-        from {
-          transform: translateX(100%);
-          opacity: 0;
-        }
-        to {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
-      .notification-exit {
-        animation: slideOut 0.3s ease-in;
-      }
-      @keyframes slideOut {
-        from {
-          transform: translateX(0);
-          opacity: 1;
-        }
-        to {
-          transform: translateX(100%);
-          opacity: 0;
-        }
-      }
-
-      /* Efecto hover para tarjetas de producto */
-      .product-card {
-        transition: all 0.3s ease;
-      }
-      .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      }
-
-      /* Estilo para el carrito */
-      .cart-item {
-        transition: all 0.2s ease;
-      }
-      .cart-item:hover {
-        background-color: #f8fafc;
-      }
-
-      /* Efecto para botones */
-      .btn-primary {
-        transition: all 0.3s ease;
-      }
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-      }
-
-      /* Animaciones de entrada */
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .animate-fadeInUp {
-        animation: fadeInUp 0.6s ease-out forwards;
-      }
-      .animate-fadeInUp.delay-100 {
-        animation-delay: 0.1s;
-      }
-      .animate-fadeInUp.delay-200 {
-        animation-delay: 0.2s;
-      }
-      .animate-fadeInUp.delay-300 {
-        animation-delay: 0.3s;
-      }
-</style>
-{% endblock %}
-
 {% block content %}
 <body class="bg-gray-100 min-h-screen flex flex-col">
     <!-- Hero Section mejorada -->
@@ -133,7 +51,7 @@
 
     <!-- Sección de características -->
     <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div class="text-center mb-12">
+      <div class="text-center mb-12 animate-fadeInUp">
         <h2 class="text-3xl font-bold text-gray-900 mb-4">
           ¿Por qué elegir TheBox?
         </h2>
@@ -143,7 +61,7 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+        <div class="bg-white p-6 rounded-lg shadow-sm text-center animate-fadeInUp">
           <div
             class="bg-gray-300 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
           >
@@ -156,7 +74,7 @@
           </p>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+        <div class="bg-white p-6 rounded-lg shadow-sm text-center animate-fadeInUp">
           <div
             class="bg-gray-300 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
           >
@@ -170,7 +88,7 @@
           </p>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+        <div class="bg-white p-6 rounded-lg shadow-sm text-center animate-fadeInUp">
           <div
             class="bg-gray-300 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
           >
@@ -188,7 +106,7 @@
 
     <!-- Sección de testimonios -->
     <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div class="text-center mb-12">
+      <div class="text-center mb-12 animate-fadeInUp">
         <h2 class="text-3xl font-bold text-gray-900 mb-4">
           Nuestros Clientes
         </h2>
@@ -198,7 +116,7 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 animate-fadeInUp">
           <div class="flex items-center mb-4">
             <img
               src="https://sherpaday.com/wp-content/uploads/2023/12/andy-waak-2024.jpg"
@@ -221,7 +139,7 @@
           </p>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 animate-fadeInUp">
           <div class="flex items-center mb-4">
             <img
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_J64H3ViHnb0kyiGdw2qSRVVGRd0LxbWqsA&s"
@@ -244,7 +162,7 @@
           </p>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 animate-fadeInUp">
           <div class="flex items-center mb-4">
             <img
               src="https://mishoamoli.com/wp-content/uploads/2021/11/241863114_1960402657468350_2424300916312780707_n.jpg"
@@ -271,7 +189,7 @@
 
     <!-- Newsletter -->
     <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-100 via-gray-500 to-black text-white">
-      <div class="max-w-4xl mx-auto text-center">
+      <div class="max-w-4xl mx-auto text-center animate-fadeInUp">
         <h2 class="text-3xl font-bold mb-4">Suscríbete a nuestro Newsletter</h2>
         <p class="text-lg mb-8 max-w-2xl mx-auto">
           Recibe las últimas novedades, ofertas exclusivas y descuentos
@@ -293,242 +211,5 @@
         </form>
       </div>
     </section>
-
-    <script>
-      // Sistema de carrito de compras
-      document.addEventListener("DOMContentLoaded", function () {
-        // Inicializar carrito desde localStorage o crear uno vacío
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-        // Actualizar contador del carrito
-        function updateCartCount() {
-          const count = cart.reduce((total, item) => total + item.quantity, 0);
-          document.getElementById("cart-count").textContent = count;
-          localStorage.setItem("cart", JSON.stringify(cart));
-        }
-
-        // Mostrar/ocultar mini carrito
-        const cartToggle = document.getElementById("cart-toggle");
-        const miniCart = document.getElementById("mini-cart");
-        const closeCart = document.getElementById("close-cart");
-
-        cartToggle.addEventListener("click", function (e) {
-          e.stopPropagation();
-          miniCart.classList.toggle("hidden");
-          if (!miniCart.classList.contains("hidden")) {
-            renderCartItems();
-          }
-        });
-
-        closeCart.addEventListener("click", function () {
-          miniCart.classList.add("hidden");
-        });
-
-        // Cerrar carrito al hacer clic fuera
-        document.addEventListener("click", function (e) {
-          if (
-            !miniCart.contains(e.target) &&
-            e.target !== cartToggle &&
-            !cartToggle.contains(e.target)
-          ) {
-            miniCart.classList.add("hidden");
-          }
-        });
-
-        // Renderizar items del carrito
-        function renderCartItems() {
-          const cartItemsContainer = document.getElementById("cart-items");
-          const cartTotalElement = document.getElementById("cart-total");
-
-          if (cart.length === 0) {
-            cartItemsContainer.innerHTML = `
-                        <div class="p-4 text-center text-gray-500">
-                            <i class="fas fa-shopping-cart text-3xl mb-2"></i>
-                            <p>Tu carrito está vacío</p>
-                        </div>
-                    `;
-            cartTotalElement.textContent = "S/ 0.00";
-            return;
-          }
-
-          let itemsHTML = "";
-          let total = 0;
-
-          cart.forEach((item, index) => {
-            const itemTotal = item.price * item.quantity;
-            total += itemTotal;
-
-            itemsHTML += `
-                        <div class="cart-item p-4 flex items-start">
-                            <img src="${item.image}" alt="${
-              item.name
-            }" class="w-16 h-16 object-cover rounded">
-                            <div class="ml-3 flex-grow">
-                                <h4 class="font-medium text-gray-900">${
-                                  item.name
-                                }</h4>
-                                <p class="text-sm text-gray-600">S/ ${item.price.toFixed(
-                                  2
-                                )}</p>
-                                <div class="flex items-center mt-1">
-                                    <button class="change-quantity text-gray-500 hover:text-blue-600" data-index="${index}" data-change="-1">
-                                        <i class="fas fa-minus text-xs"></i>
-                                    </button>
-                                    <span class="mx-2 text-gray-700">${
-                                      item.quantity
-                                    }</span>
-                                    <button class="change-quantity text-gray-500 hover:text-blue-600" data-index="${index}" data-change="1">
-                                        <i class="fas fa-plus text-xs"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <button class="remove-item text-gray-400 hover:text-red-500 ml-2" data-index="${index}">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    `;
-          });
-
-          cartItemsContainer.innerHTML = itemsHTML;
-          cartTotalElement.textContent = `S/ ${total.toFixed(2)}`;
-
-          // Agregar event listeners a los botones de cambio de cantidad
-          document.querySelectorAll(".change-quantity").forEach((button) => {
-            button.addEventListener("click", function () {
-              const index = parseInt(this.getAttribute("data-index"));
-              const change = parseInt(this.getAttribute("data-change"));
-
-              cart[index].quantity += change;
-
-              // Eliminar si la cantidad es 0 o menos
-              if (cart[index].quantity <= 0) {
-                cart.splice(index, 1);
-              }
-
-              updateCartCount();
-              renderCartItems();
-              showNotification("Carrito actualizado", "success");
-            });
-          });
-
-          // Agregar event listeners a los botones de eliminar
-          document.querySelectorAll(".remove-item").forEach((button) => {
-            button.addEventListener("click", function () {
-              const index = parseInt(this.getAttribute("data-index"));
-              cart.splice(index, 1);
-
-              updateCartCount();
-              renderCartItems();
-              showNotification("Producto eliminado del carrito", "info");
-            });
-          });
-        }
-
-        // Agregar productos al carrito
-        document.querySelectorAll(".add-to-cart").forEach((button) => {
-          button.addEventListener("click", function () {
-            const id = this.getAttribute("data-id");
-            const name = this.getAttribute("data-name");
-            const price = parseFloat(this.getAttribute("data-price"));
-            const image = this.getAttribute("data-image");
-
-            // Verificar si el producto ya está en el carrito
-            const existingItem = cart.find((item) => item.id === id);
-
-            if (existingItem) {
-              existingItem.quantity += 1;
-            } else {
-              cart.push({
-                id,
-                name,
-                price,
-                image,
-                quantity: 1,
-              });
-            }
-
-            updateCartCount();
-            renderCartItems();
-            showNotification(`${name} añadido al carrito`, "success");
-
-            // Mostrar el carrito automáticamente
-            miniCart.classList.remove("hidden");
-          });
-        });
-
-        // Función para mostrar notificaciones
-        function showNotification(message, type = "info") {
-          const container = document.getElementById("notification-container");
-
-          const notification = document.createElement("div");
-          notification.className = `notification max-w-sm w-full p-4 rounded-lg shadow-lg border-l-4 ${getNotificationStyles(
-            type
-          )}`;
-
-          notification.innerHTML = `
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            ${getNotificationIcon(type)}
-                        </div>
-                        <div class="ml-3 flex-1">
-                            <p class="text-sm font-medium">${message}</p>
-                        </div>
-                        <div class="ml-3 flex-shrink-0">
-                            <button onclick="this.parentElement.parentElement.parentElement.classList.add('notification-exit'); setTimeout(() => this.parentElement.parentElement.parentElement.remove(), 300)" class="text-gray-400 hover:text-gray-600">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-          container.appendChild(notification);
-
-          // Auto-remover después de 5 segundos
-          setTimeout(() => {
-            notification.classList.add("notification-exit");
-            setTimeout(() => notification.remove(), 300);
-          }, 5000);
-        }
-
-        function getNotificationStyles(type) {
-          const styles = {
-            success: "bg-green-50 border-green-400 text-green-800",
-            error: "bg-red-50 border-red-400 text-red-800",
-            warning: "bg-yellow-50 border-yellow-400 text-yellow-800",
-            info: "bg-blue-50 border-blue-400 text-blue-800",
-          };
-          return styles[type] || styles["info"];
-        }
-
-        function getNotificationIcon(type) {
-          const icons = {
-            success:
-              '<svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>',
-            error:
-              '<svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>',
-            warning:
-              '<svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>',
-            info: '<svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>',
-          };
-          return icons[type] || icons["info"];
-        }
-
-        // Inicializar contador del carrito
-        updateCartCount();
-      });
-    </script>
-
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %}
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          {% for category, message in messages %}
-              showNotification({{ message|tojson }}, {{ category|tojson }});
-          {% endfor %}
-      });
-    </script>
-    {% endif %} {% endwith %}
   </body>
 {% endblock %}
