@@ -5,16 +5,17 @@
 {% endblock %}
 
 {% block content %}
-<div class="p-6 relative">
+<div class="relative">
     <!-- Carrusel -->
     <div class="overflow-hidden whitespace-nowrap bg-gradient-to-r from-blue-100 to-blue-200 py-2 rounded shadow mb-6">
         <div class="animate-marquee inline-block text-lg font-semibold text-blue-800 px-4 tracking-wide">
-            ¡A toda potencia! — Corre con estilo — Zapatillas edición limitada — Comodidad y rendimiento — Diseñadas para ti — ⚡
+            ¡A toda potencia! — Corre con estilo — Zapatillas edición limitada — Comodidad y rendimiento — Diseñadas
+            para ti — ⚡
         </div>
     </div>
 
     <!-- Botón para abrir filtros -->
-    <div class="flex justify-start mb-4">
+    <div class="flex justify-end mx-4 px-4">
         <button onclick="toggleFiltro()"
             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-semibold">
             Filtrar
@@ -55,8 +56,8 @@
             <div>
                 <label class="block text-sm font-semibold">Precio máximo</label>
                 <div class="flex items-center gap-2">
-                    <input id="precioRange" type="range" min="0" max="500" step="10"
-                        class="w-full accent-blue-600" oninput="precioInput.value = this.value">
+                    <input id="precioRange" type="range" min="0" max="500" step="10" class="w-full accent-blue-600"
+                        oninput="precioInput.value = this.value">
                     <input id="precioInput" name="precio" type="number" min="0" max="500"
                         class="w-20 px-2 py-1 border rounded text-right" value="250"
                         oninput="precioRange.value = this.value">
@@ -90,34 +91,69 @@
         </form>
     </div>
 
-    <!-- Productos -->
-    <main class="flex-1">
-        <h2 class="text-2xl font-bold mb-4">Catálogo de Productos</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section class="flex-1 px-4 sm:px-6 lg:px-8 py-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12">
             {% for producto in productos %}
-            <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
+            <div
+                class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1">
                 <a href="{{ url_for('products.detalle_products', producto_id=producto['id']) }}" class="block">
-                    <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}"
-                        class="w-full h-48 object-cover rounded mb-2">
-                    <h3 class="text-lg font-bold">{{ producto.nombre }}</h3>
-                    <p class="text-gray-500 text-sm">{{ producto.descripcion }}</p>
-                    <p class="text-blue-600 font-bold mt-2">${{ producto.precio }}</p>
+
+                    <!-- Imagen del producto -->
+                    <div class="flex items-center justify-center p-4">
+                        <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}"
+                            class="object-contain transition-transform duration-300 hover:scale-105">
+                    </div>
+
+                    <!-- Contenido de la card -->
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-lg font-bold text-gray-800 mb-1">{{ producto.nombre }}</h3>
+                            {% if producto.descuento %}
+                            <span class="text-sm line-through text-gray-400">${{ producto.precio_original }}</span>
+                            {% endif %}
+                        </div>
+
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ producto.descripcion }}</p>
+
+                        <div class="flex justify-between items-center">
+                            <p class="text-blue-600 font-bold text-lg">${{ producto.precio }}</p>
+                        </div>
+                    </div>
                 </a>
-                <!-- Agregar al carrito -->
-                <form action="{{ url_for('cart.add_to_cart', producto_id=producto['id']) }}" method="post">
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Agregar al carrito</button>
-</form>
+
+                <!-- Botón de agregar al carrito -->
+                <div class="px-5 pb-5">
+                    <form action="{{ url_for('cart.add_to_cart', producto_id=producto['id']) }}" method="post">
+                        <button type="submit"
+                            class="w-full bg-black hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            Añadir al carrito
+                        </button>
+                    </form>
+                </div>
             </div>
             {% else %}
-            <p class="text-gray-600">No se encontraron productos.</p>
+            <div class="col-span-full text-center py-12">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 class="mt-2 text-lg font-medium text-gray-900">No se encontraron productos</h3>
+                <p class="mt-1 text-gray-500">Prueba con otros filtros o vuelve más tarde.</p>
+            </div>
             {% endfor %}
         </div>
-    </main>
+    </section>
 </div>
 
 <!-- Icono flotante del carrito -->
 <a href="{{ url_for('cart.view_cart') }}"
-   class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition duration-300 z-50">
+    class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg transition duration-300 z-50">
     🛒
 </a>
 
@@ -131,12 +167,18 @@
 
 <!-- Carrusel animado -->
 <style>
-@keyframes marquee {
-    0% { transform: translateX(100%) }
-    100% { transform: translateX(-100%) }
-}
-.animate-marquee {
-    animation: marquee 15s linear infinite;
-}
+    @keyframes marquee {
+        0% {
+            transform: translateX(100%)
+        }
+
+        100% {
+            transform: translateX(-100%)
+        }
+    }
+
+    .animate-marquee {
+        animation: marquee 20s linear infinite;
+    }
 </style>
 {% endblock %}

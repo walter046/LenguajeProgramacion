@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="UTF-8">
@@ -56,7 +56,7 @@
               class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Productos</a>
             <a href="{{url_for('main.marcas')}}"
               class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Marcas</a>
-              <a href="{{url_for('main.locales')}}"
+            <a href="{{url_for('main.locales')}}"
               class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Locales</a>
           </div>
         </div>
@@ -77,17 +77,15 @@
             </button>
             <div
               class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform scale-95 group-hover:scale-100 origin-top-right">
-              <a href="{{ url_for('user.dashboard') }}"
+              {% if session.usuario_rol == 'ADMIN' %}
+              <a href="{{ url_for('admin.dashboard_admin') }}"
                 class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors">
-                Dashboard
+                Dashboard Admin
               </a>
+              {% endif %}
               <a href="{{ url_for('main.carrito') }}"
                 class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors">
                 Mi Carrito
-              </a>
-              <a href="{{ url_for('pedidos.mis_pedidos') }}"
-                class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors">
-                Mis Pedidos
               </a>
               <hr class="border-gray-200 my-1" />
               <a href="{{ url_for('auth.logout') }}"
