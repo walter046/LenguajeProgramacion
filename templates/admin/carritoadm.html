@@ -1,0 +1,176 @@
+{% extends 'admin/dashboardadm.html' %}
+
+{% block title %}Administrar Carrito{% endblock %}
+
+{% block AdminContent %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header con título y botón -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+        <div class="mb-4 sm:mb-0">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Gestión de Carritos</h1>
+            <p class="text-gray-600 mt-1">Visualiza y administra todos los carritos de compras</p>
+        </div>
+        <button onclick="abrirPanelAgregar()"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm transition duration-150 ease-in-out flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    clip-rule="evenodd" />
+            </svg>
+            Agregar al Carrito
+        </button>
+    </div>
+
+    <!-- Tabla de carritos -->
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Usuario</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Producto</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Cantidad</th>
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha
+                        </th>
+                        <th scope="col"
+                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for item in carrito %}
+                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ item.id }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900 font-medium">{{ item.nombre_usuario }}</div>
+                            <div class="text-sm text-gray-500">ID: {{ item.usuario_id }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900 font-medium">{{ item.nombre_zapatilla }}</div>
+                            <div class="text-sm text-gray-500">ID: {{ item.zapatilla_id }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                {{ item.cantidad }} unidad(es)
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ item.agregado_en.strftime('%d/%m/%Y %H:%M') if item.agregado_en else 'N/A' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div class="flex justify-end space-x-2">
+                                <button
+                                    onclick="abrirPanelEditar({{ item.id }}, {{ item.usuario_id }}, {{ item.zapatilla_id }}, {{ item.cantidad }})"
+                                    class="text-yellow-600 hover:text-yellow-900 bg-yellow-50 hover:bg-yellow-100 px-3 py-1 rounded-md text-sm font-medium transition duration-150 ease-in-out flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    Editar
+                                </button>
+                                <form action="{{ url_for('admin.eliminar_carrito', id=item.id) }}" method="POST"
+                                    class="inline">
+                                    <button type="submit"
+                                        class="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-md text-sm font-medium transition duration-150 ease-in-out flex items-center"
+                                        onclick="return confirm('¿Estás seguro de eliminar este ítem del carrito?')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900">No hay items en el carrito</h3>
+                            <p class="mt-1 text-sm text-gray-500">Agrega productos al carrito para comenzar.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Panel lateral -->
+<div id="panelCarrito"
+    class="fixed top-0 right-0 w-full max-w-md h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+    <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 id="tituloPanel" class="text-xl font-bold">Agregar al Carrito</h2>
+            <button onclick="cerrarPanel()" class="text-gray-500 text-2xl hover:text-black">&times;</button>
+        </div>
+        <form id="formCarrito" method="POST">
+            <input type="hidden" name="id" id="input_id">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium">ID Usuario</label>
+                    <input type="number" name="usuario_id" id="input_usuario" required
+                        class="w-full border px-3 py-2 rounded">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">ID Zapatilla</label>
+                    <input type="number" name="zapatilla_id" id="input_zapatilla" required
+                        class="w-full border px-3 py-2 rounded">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Cantidad</label>
+                    <input type="number" name="cantidad" id="input_cantidad" min="1" required
+                        class="w-full border px-3 py-2 rounded">
+                </div>
+                <button type="submit"
+                    class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const panel = document.getElementById('panelCarrito');
+    const form = document.getElementById('formCarrito');
+    const titulo = document.getElementById('tituloPanel');
+
+    function abrirPanelAgregar() {
+        titulo.textContent = "Agregar al Carrito";
+        form.action = "{{ url_for('admin.agregar_carrito') }}";
+        form.reset();
+        panel.classList.remove('translate-x-full');
+    }
+
+    function abrirPanelEditar(id, usuario_id, zapatilla_id, cantidad) {
+        titulo.textContent = "Editar Ítem del Carrito";
+        form.action = `/admin/carritoadm/editar/${id}`;
+        document.getElementById('input_usuario').value = usuario_id;
+        document.getElementById('input_zapatilla').value = zapatilla_id;
+        document.getElementById('input_cantidad').value = cantidad;
+        panel.classList.remove('translate-x-full');
+    }
+
+    function cerrarPanel() {
+        panel.classList.add('translate-x-full');
+    }
+</script>
+{% endblock %}

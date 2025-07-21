@@ -21,156 +21,279 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
-# === CRUD ZAPATILLAS ===
-
-@admin_bp.route('/zapatillas')
-@admin_required
-def lista_zapatillas():
+def obtener_totales_admin():
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM zapatillas")
-    zapatillas = cursor.fetchall()
-    cursor.close()
-    return render_template('admin/zapatillas/index.html', zapatillas=zapatillas)
+    
+    cursor.execute("SELECT COUNT(*) AS total FROM usuarios")
+    total_usuarios = cursor.fetchone()['total']
+    
+    cursor.execute("SELECT COUNT(*) AS total FROM pedidos")
+    total_pedidos = cursor.fetchone()['total']
+    
+    cursor.execute("SELECT COUNT(*) AS total FROM zapatillas")
+    total_zapatillas = cursor.fetchone()['total']
+    
+    cursor.execute("SELECT COUNT(*) AS total FROM carrito")
+    total_carritos = cursor.fetchone()['total']
+    
+    return {
+        'total_usuarios': total_usuarios,
+        'total_pedidos': total_pedidos,
+        'total_zapatillas': total_zapatillas,
+        'total_carritos': total_carritos
+    }
 
-@admin_bp.route('/zapatillas/crear', methods=['GET', 'POST'])
+# Dashboard Admin
+@admin_bp.route('/dashboardadm')
 @admin_required
-def crear_zapatilla():
-    if request.method == 'POST':
-        datos = (
-            request.form['nombre'], request.form['marca'], request.form['descripcion'],
-            request.form['precio'], request.form['stock'], request.form['imagen_url'],
-            request.form['talla'], request.form['genero'], request.form['tipo'], request.form['colaboracion']
-        )
-        cursor = mysql.connection.cursor()
-        cursor.execute("""
-            INSERT INTO zapatillas (nombre, marca, descripcion, precio, stock, imagen_url, talla, genero, tipo, colaboracion)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, datos)
-        mysql.connection.commit()
-        cursor.close()
-        flash("Zapatilla creada exitosamente")
-        return redirect(url_for('admin.lista_zapatillas'))
-    return render_template('admin/zapatillas/crear.html')
+def dashboard_admin():
+    totales = obtener_totales_admin()
 
-@admin_bp.route('/zapatillas/editar/<int:id>', methods=['GET', 'POST'])
+    return render_template(
+        'admin/dashboardadm.html', **totales
+    )
+
+# CRUD CARRITO
+@admin_bp.route('/carritoadm')
 @admin_required
-def editar_zapatilla(id):
+def ver_carrito():
     cursor = mysql.connection.cursor()
-    if request.method == 'POST':
-        datos = (
-            request.form['nombre'], request.form['marca'], request.form['descripcion'],
-            request.form['precio'], request.form['stock'], request.form['imagen_url'],
-            request.form['talla'], request.form['genero'], request.form['tipo'], request.form['colaboracion'], id
-        )
-        cursor.execute("""
-            UPDATE zapatillas SET nombre=%s, marca=%s, descripcion=%s, precio=%s, stock=%s, imagen_url=%s,
-            talla=%s, genero=%s, tipo=%s, colaboracion=%s WHERE id=%s
-        """, datos)
-        mysql.connection.commit()
-        flash("Zapatilla actualizada")
-        return redirect(url_for('admin.lista_zapatillas'))
-    cursor.execute("SELECT * FROM zapatillas WHERE id=%s", (id,))
-    zapatilla = cursor.fetchone()
-    cursor.close()
-    return render_template('admin/zapatillas/editar.html', zapatilla=zapatilla)
+    cursor.execute("""
+        SELECT c.id, c.usuario_id, u.nombre AS nombre_usuario,
+               z.id AS zapatilla_id, z.nombre AS nombre_zapatilla,
+               c.cantidad, c.agregado_en
+        FROM carrito c
+        JOIN usuarios u ON c.usuario_id = u.id
+        JOIN zapatillas z ON c.zapatilla_id = z.id
+    """)
+    carrito = cursor.fetchall()
+    
+    totales = obtener_totales_admin()
+    
+    return render_template('admin/carritoadm.html', carrito=carrito, **totales)
 
-@admin_bp.route('/zapatillas/eliminar/<int:id>', methods=['POST'])
+@admin_bp.route('/carritoadm/agregar', methods=['POST'])
 @admin_required
-def eliminar_zapatilla(id):
+def agregar_carrito():
+    usuario_id = request.form['usuario_id']
+    zapatilla_id = request.form['zapatilla_id']
+    cantidad = request.form['cantidad']
+    agregado_en = datetime.now()
+
     cursor = mysql.connection.cursor()
-    cursor.execute("DELETE FROM zapatillas WHERE id=%s", (id,))
+    cursor.execute("""
+        INSERT INTO carrito (usuario_id, zapatilla_id, cantidad, agregado_en)
+        VALUES (%s, %s, %s, %s)
+    """, (usuario_id, zapatilla_id, cantidad, agregado_en))
     mysql.connection.commit()
-    cursor.close()
-    flash("Zapatilla eliminada")
-    return redirect(url_for('admin.lista_zapatillas'))
 
-# === CRUD USUARIOS ===
+    flash('Producto agregado al carrito')
+    return redirect(url_for('admin.ver_carrito'))
 
-@admin_bp.route('/usuarios')
+@admin_bp.route('/carritoadm/editar/<int:id>', methods=['POST'])
 @admin_required
-def lista_usuarios():
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT id, nombre, username, direccion, telefono, rol FROM usuarios")
-    usuarios = cursor.fetchall()
-    cursor.close()
-    return render_template('admin/usuarios/index.html', usuarios=usuarios)
+def editar_carrito(id):
+    usuario_id = request.form['usuario_id']
+    zapatilla_id = request.form['zapatilla_id']
+    cantidad = request.form['cantidad']
 
-@admin_bp.route('/usuarios/editar/<int:id>', methods=['GET', 'POST'])
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        UPDATE carrito
+        SET usuario_id = %s, zapatilla_id = %s, cantidad = %s
+        WHERE id = %s
+    """, (usuario_id, zapatilla_id, cantidad, id))
+    mysql.connection.commit()
+
+    flash('Producto actualizado en el carrito')
+    return redirect(url_for('admin.ver_carrito'))
+
+@admin_bp.route('/carritoadm/eliminar/<int:id>', methods=['POST'])
+@admin_required
+def eliminar_carrito(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("DELETE FROM carrito WHERE id = %s", (id,))
+    mysql.connection.commit()
+    flash('Producto eliminado del carrito')
+    return redirect(url_for('admin.ver_carrito'))
+
+# CRUD USUARIOS
+# Mostrar todos los usuarios
+@admin_bp.route('/usuariosadm')
+@admin_required
+def usuarios():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM usuarios")
+    
+    usuarios = cursor.fetchall()
+    
+    totales = obtener_totales_admin()
+    
+    return render_template('admin/usuariosadm.html', usuarios=usuarios, **totales)
+
+# Agregar un nuevo usuario
+@admin_bp.route('/usuariosadm/agregar', methods=['POST'])
+@admin_required
+def agregar_usuario():
+    nombre = request.form['nombre']
+    username = request.form['username']
+    password = request.form['password']
+    direccion = request.form['direccion']
+    telefono = request.form['telefono']
+    rol = request.form['rol']
+
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        INSERT INTO usuarios (nombre, username, password, direccion, telefono, rol, fecha_registro)
+        VALUES (%s, %s, %s, %s, %s, %s, NOW())
+    """, (nombre, username, password, direccion, telefono, rol))
+    mysql.connection.commit()
+    flash('Usuario agregado correctamente')
+    return redirect(url_for('admin.usuarios'))
+
+# Editar un usuario existente
+@admin_bp.route('/usuariosadm/editar/<int:id>', methods=['POST'])
 @admin_required
 def editar_usuario(id):
-    cursor = mysql.connection.cursor()
-    if request.method == 'POST':
-        datos = (
-            request.form['nombre'], request.form['username'], request.form['direccion'],
-            request.form['telefono'], request.form['rol'], id
-        )
-        cursor.execute("""
-            UPDATE usuarios SET nombre=%s, username=%s, direccion=%s, telefono=%s, rol=%s WHERE id=%s
-        """, datos)
-        mysql.connection.commit()
-        flash("Usuario actualizado")
-        return redirect(url_for('admin.lista_usuarios'))
-    cursor.execute("SELECT id, nombre, username, direccion, telefono, rol FROM usuarios WHERE id=%s", (id,))
-    usuario = cursor.fetchone()
-    cursor.close()
-    return render_template('admin/usuarios/editar.html', usuario=usuario)
+    nombre = request.form['nombre']
+    username = request.form['username']
+    direccion = request.form['direccion']
+    telefono = request.form['telefono']
+    rol = request.form['rol']
 
-@admin_bp.route('/usuarios/eliminar/<int:id>', methods=['POST'])
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        UPDATE usuarios
+        SET nombre=%s, username=%s, direccion=%s, telefono=%s, rol=%s
+        WHERE id=%s
+    """, (nombre, username, direccion, telefono, rol, id))
+    mysql.connection.commit()
+    flash('Usuario actualizado correctamente')
+    return redirect(url_for('admin.usuarios'))
+
+# Eliminar un usuario
+@admin_bp.route('/usuariosadm/eliminar/<int:id>', methods=['POST'])
 @admin_required
 def eliminar_usuario(id):
     cursor = mysql.connection.cursor()
-    cursor.execute("DELETE FROM usuarios WHERE id=%s", (id,))
+    cursor.execute("DELETE FROM usuarios WHERE id = %s", (id,))
     mysql.connection.commit()
-    cursor.close()
-    flash("Usuario eliminado")
-    return redirect(url_for('admin.lista_usuarios'))
+    flash('Usuario eliminado correctamente')
+    return redirect(url_for('admin.usuarios'))
 
-# === CRUD PEDIDOS ===
-
-@admin_bp.route('/pedidos')
+# CRUD ZAPATILLAS
+@admin_bp.route('/zapatillasadm')
 @admin_required
-def lista_pedidos():
+def listar_zapatillas():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM zapatillas")
+    
+    zapatillas = cursor.fetchall()
+    
+    totales = obtener_totales_admin()
+    
+    return render_template('admin/zapatillasadm.html', zapatillas=zapatillas, **totales)
+
+@admin_bp.route('/zapatillasadm/agregar', methods=['POST'])
+@admin_required
+def agregar_zapatilla():
+    nombre = request.form['nombre']
+    descripcion = request.form['descripcion']
+    precio = request.form['precio']
+    imagen_url = request.form['imagen_url']
+
+    cursor = mysql.connection.cursor()
+    cursor.execute("INSERT INTO zapatillas (nombre, descripcion, precio, imagen_url) VALUES (%s, %s, %s, %s)",
+                   (nombre, descripcion, precio, imagen_url))
+    mysql.connection.commit()
+    flash('Zapatilla agregada correctamente', 'success')
+    return redirect(url_for('admin.listar_zapatillas'))
+
+@admin_bp.route('/zapatillasadm/editar/<int:id>', methods=['POST'])
+@admin_required
+def editar_zapatilla(id):
+    nombre = request.form['nombre']
+    descripcion = request.form['descripcion']
+    precio = request.form['precio']
+    imagen_url = request.form['imagen_url']
+
     cursor = mysql.connection.cursor()
     cursor.execute("""
-        SELECT p.id, u.nombre, p.total, p.estado, p.fecha_pedido
-        FROM pedidos p
-        JOIN usuarios u ON p.usuario_id = u.id
-        ORDER BY p.fecha_pedido DESC
-    """)
+        UPDATE zapatillas 
+        SET nombre=%s, descripcion=%s, precio=%s, imagen_url=%s 
+        WHERE id=%s
+    """, (nombre, descripcion, precio, imagen_url, id))
+    mysql.connection.commit()
+    flash('Zapatilla actualizada correctamente', 'success')
+    return redirect(url_for('admin.listar_zapatillas'))
+
+@admin_bp.route('/zapatillasadm/eliminar/<int:id>', methods=['POST'])
+@admin_required
+def eliminar_zapatilla(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute("DELETE FROM zapatillas WHERE id = %s", (id,))
+    mysql.connection.commit()
+    flash('Zapatilla eliminada correctamente', 'success')
+    return redirect(url_for('admin.listar_zapatillas'))
+
+# CRUD PEDIDOS
+@admin_bp.route('/pedidosadm')
+@admin_required
+def listar_pedidos():
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT * FROM pedidos")
+    
     pedidos = cursor.fetchall()
-    cursor.close()
-    return render_template('admin/pedidos/index.html', pedidos=pedidos)
+    
+    totales = obtener_totales_admin()
+    
+    return render_template('admin/pedidosadm.html', pedidos=pedidos, **totales)
 
-@admin_bp.route('/pedidos/<int:id>')
+@admin_bp.route('/pedidosadm/eliminar/<int:id>')
 @admin_required
-def ver_pedido(id):
+def eliminar_pedido(id):
     cursor = mysql.connection.cursor()
-    cursor.execute("""
-        SELECT p.id, u.nombre, p.total, p.estado, p.fecha_pedido
-        FROM pedidos p
-        JOIN usuarios u ON p.usuario_id = u.id
-        WHERE p.id = %s
-    """, (id,))
-    pedido = cursor.fetchone()
-
-    cursor.execute("""
-        SELECT d.cantidad, d.precio_unitario, z.nombre
-        FROM detalles_pedido d
-        JOIN zapatillas z ON d.zapatilla_id = z.id
-        WHERE d.pedido_id = %s
-    """, (id,))
-    detalles = cursor.fetchall()
-    cursor.close()
-    return render_template('admin/pedidos/ver.html', pedido=pedido, detalles=detalles)
-
-@admin_bp.route('/pedidos/estado/<int:id>', methods=['POST'])
-@admin_required
-def cambiar_estado_pedido(id):
-    nuevo_estado = request.form['estado']
-    cursor = mysql.connection.cursor()
-    cursor.execute("UPDATE pedidos SET estado=%s WHERE id=%s", (nuevo_estado, id))
+    cursor.execute("DELETE FROM pedidos WHERE id = %s", (id,))
     mysql.connection.commit()
-    cursor.close()
-    flash("Estado actualizado")
-    return redirect(url_for('admin.ver_pedido', id=id))
+    return redirect(url_for('admin.listar_pedidos'))
+
+@admin_bp.route('/pedidosadm/editar/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def editar_pedido(id):
+    cursor = mysql.connection.cursor()
+    if request.method == 'POST':
+        usuario_id = request.form['usuario_id']
+        total = request.form['total']
+        estado = request.form['estado']
+        direccion = request.form['direccion']
+        fecha_pedido = request.form['fecha_pedido']
+        cursor.execute("""
+            UPDATE pedidos
+            SET usuario_id=%s, total=%s, estado=%s, direccion=%s, fecha_pedido=%s
+            WHERE id=%s
+        """, (usuario_id, total, estado, direccion, fecha_pedido, id))
+        mysql.connection.commit()
+        return redirect(url_for('admin.listar_pedidos'))
+    
+    cursor.execute("SELECT * FROM pedidos WHERE id = %s", (id,))
+    pedido = cursor.fetchone()
+    return render_template('admin/editar_pedidoadm.html', pedido=pedido)
+
+@admin_bp.route('/pedidosadm/agregar', methods=['GET', 'POST'])
+@admin_required
+def agregar_pedido():
+    if request.method == 'POST':
+        usuario_id = request.form['usuario_id']
+        total = request.form['total']
+        estado = request.form['estado']
+        direccion = request.form['direccion']
+        fecha_pedido = request.form['fecha_pedido']
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            INSERT INTO pedidos (usuario_id, total, estado, direccion, fecha_pedido)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (usuario_id, total, estado, direccion, fecha_pedido))
+        mysql.connection.commit()
+        return redirect(url_for('admin.listar_pedidos'))
+    
+    return render_template('admin/agregar_pedidoadm.html')
