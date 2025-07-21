@@ -1,0 +1,112 @@
+{% extends 'app.html' %}
+
+{% block title %}Administrar Zapatillas{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-8">
+    <h1 class="text-3xl font-bold mb-6">CRUD de Zapatillas</h1>
+
+    <div class="flex justify-end mb-4">
+        <button onclick="abrirPanelAgregar()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Nueva Zapatilla
+        </button>
+    </div>
+
+    <!-- Tabla de zapatillas -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow">
+        <table class="w-full table-auto border border-gray-200">
+            <thead class="bg-gray-100 text-left text-sm font-semibold">
+                <tr>
+                    <th class="p-3">Imagen</th>
+                    <th class="p-3">Nombre</th>
+                    <th class="p-3">Descripción</th>
+                    <th class="p-3">Precio</th>
+                    <th class="p-3">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for z in zapatillas %}
+                <tr class="border-t hover:bg-gray-50">
+                    <td class="p-3">
+                        <img src="{{ z.imagen_url }}" class="w-16 h-16 object-cover rounded" alt="{{ z.nombre }}">
+                    </td>
+                    <td class="p-3">{{ z.nombre }}</td>
+                    <td class="p-3">{{ z.descripcion }}</td>
+                    <td class="p-3">${{ z.precio }}</td>
+                    <td class="p-3 space-x-2">
+                        <button onclick="abrirPanelEditar({{ z.id }}, '{{ z.nombre }}', '{{ z.descripcion }}', {{ z.precio }}, '{{ z.imagen_url }}')" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Editar</button>
+                        <form action="{{ url_for('zapatillas_adm.eliminar_zapatilla', id=z.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" onclick="return confirm('¿Eliminar zapatilla?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-gray-500 p-4">No hay zapatillas registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PANEL LATERAL PARA AGREGAR/EDITAR -->
+<div id="panelZapatilla" class="fixed top-0 right-0 w-full max-w-md h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+    <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 id="tituloPanel" class="text-xl font-bold">Agregar Zapatilla</h2>
+            <button onclick="cerrarPanel()" class="text-gray-500 text-2xl hover:text-black">&times;</button>
+        </div>
+        <form id="formZapatilla" method="POST">
+            <input type="hidden" name="id" id="input_id">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium">Nombre</label>
+                    <input type="text" name="nombre" id="input_nombre" required class="w-full border px-3 py-2 rounded">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Descripción</label>
+                    <textarea name="descripcion" id="input_descripcion" required class="w-full border px-3 py-2 rounded"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Precio</label>
+                    <input type="number" name="precio" id="input_precio" step="0.01" required class="w-full border px-3 py-2 rounded">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Imagen (URL)</label>
+                    <input type="text" name="imagen_url" id="input_imagen_url" required class="w-full border px-3 py-2 rounded">
+                </div>
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const panel = document.getElementById('panelZapatilla');
+    const titulo = document.getElementById('tituloPanel');
+    const form = document.getElementById('formZapatilla');
+
+    function abrirPanelAgregar() {
+        titulo.textContent = "Agregar Zapatilla";
+        form.action = "{{ url_for('zapatillas_adm.agregar_zapatilla') }}";
+        form.reset();
+        panel.classList.remove('translate-x-full');
+    }
+
+    function abrirPanelEditar(id, nombre, descripcion, precio, imagen_url) {
+        titulo.textContent = "Editar Zapatilla";
+        form.action = `/zapatillasadm/editar/${id}`;
+        document.getElementById('input_id').value = id;
+        document.getElementById('input_nombre').value = nombre;
+        document.getElementById('input_descripcion').value = descripcion;
+        document.getElementById('input_precio').value = precio;
+        document.getElementById('input_imagen_url').value = imagen_url;
+        panel.classList.remove('translate-x-full');
+    }
+
+    function cerrarPanel() {
+        panel.classList.add('translate-x-full');
+    }
+</script>
+{% endblock %}

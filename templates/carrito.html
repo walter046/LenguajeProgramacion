@@ -23,12 +23,28 @@
                 </div>
             {% endfor %}
         </div>
+
+        <div class="mb-6 bg-gray-100 p-4 rounded">
+    <h2 class="text-xl font-semibold mb-2">Dirección de envío</h2>
+    {% if 'usuario_id' in session %}
+        <p class="text-gray-700">{{ direccion }}</p>
+    {% else %}
+        <form method="POST" action="{{ url_for('cart.set_direccion') }}">
+            <label for="direccion" class="block mb-1">Ingresa tu dirección:</label>
+            <input type="text" id="direccion" name="direccion" value="{{ direccion }}" required
+                   class="w-full p-2 border border-gray-300 rounded mb-2">
+            <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">Guardar dirección</button>
+        </form>
+    {% endif %}
+</div>
+
+
         <div class="mt-6 flex justify-between items-center">
             <a href="{{ url_for('cart.clear_cart') }}"
                class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">Vaciar carrito</a>
             <a href="{{ url_for('cart.checkout') }}"
-   class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded">Proceder al pago</a>
-
+               class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded">Proceder al pago</a>
         </div>
     {% else %}
         <p class="text-gray-600">Tu carrito está vacío.</p>

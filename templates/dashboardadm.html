@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #eaf1f8;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        .card h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+        .card p {
+            font-size: 26px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        .nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Panel de Administración</h1>
+        <div class="nav">
+            <a href="{{ url_for('admin_dashboard.dashboard_admin') }}">Inicio</a>
+            <a href="{{ url_for('usuariosadm.usuarios') }}">Usuarios</a>
+            <a href="{{ url_for('zapatillas_adm.listar_zapatillas') }}">Zapatillas</a>
+            <a href="{{ url_for('pedidosadm.listar_pedidos') }}">Pedidos</a>
+            <a href="{{ url_for('carritoadm.ver_carrito') }}">Carrito</a>
+        </div>
+        <div class="stats">
+            <div class="card">
+                <h3>Usuarios</h3>
+                <p>{{ total_usuarios }}</p>
+            </div>
+            <div class="card">
+                <h3>Pedidos</h3>
+                <p>{{ total_pedidos }}</p>
+            </div>
+            <div class="card">
+                <h3>Zapatillas</h3>
+                <p>{{ total_zapatillas }}</p>
+            </div>
+            <div class="card">
+                <h3>Carritos</h3>
+                <p>{{ total_carritos }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
