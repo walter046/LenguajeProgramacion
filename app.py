@@ -39,6 +39,21 @@ app.register_blueprint(products_bp)
 from routes.cart import cart_bp
 app.register_blueprint(cart_bp)
 
+from routes.dashboardadm import admin_dashboard_bp
+app.register_blueprint(admin_dashboard_bp)
+
+from routes.usuariosadm import usuariosadm_bp
+app.register_blueprint(usuariosadm_bp)
+
+from routes.zapatillasadm import zapatillas_adm_bp
+app.register_blueprint(zapatillas_adm_bp)
+
+from routes.pedidosadm import pedidosadm_bp
+app.register_blueprint(pedidosadm_bp)
+
+from routes.carritoadm import carrito_bp
+app.register_blueprint(carrito_bp)
+
 if __name__ == '__main__':
     app.run(debug=True)
 
