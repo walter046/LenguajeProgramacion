@@ -1,12 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <title>{% block title %}{% endblock %}</title>
+  <title>{% block title %}TheBox{% endblock %}</title>
   {% block customCSS %}
+  <style>
+    /* Animaciones de entrada */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .animate-fadeInUp.delay-100 {
+      animation-delay: 0.1s;
+    }
+
+    .animate-fadeInUp.delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .animate-fadeInUp.delay-300 {
+      animation-delay: 0.3s;
+    }
+  </style>
   {% endblock %}
 </head>
 
@@ -14,35 +45,23 @@
   {% block navbar %}
   <nav class="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
+      <div class="flex justify-between items-center h-20">
         <div class="flex items-center space-x-8">
           <a href="{{ url_for('main.index') }}" class="flex items-center space-x-2">
-            <span class="text-2xl font-bold text-blue-600">SNEAKER</span>
-            <span class="text-2xl font-bold text-gray-800">SHOP</span>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQe5H6dZjHst-6dHhxCjpHXfZpDyh3eU_2mkw&s"
+              alt="logo" class="h-18 w-auto transform hover:scale-105 transition duration-300" />
           </a>
-          <div class="hidden md:flex space-x-6">
-            <a href="{{ url_for('main.index') }}"
-              class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Inicio</a>
-            <a href="{{ url_for('main.products') }}"
-              class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Productos</a>
-            <a href="{{url_for('main.novedades')}}"
-              class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Novedades</a>
-            <a href="{{url_for('main.ofertas')}}"
-              class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Ofertas</a>
+          <div class="hidden md:flex space-x-7">
+            <a href="{{ url_for('products.products') }}"
+              class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Productos</a>
+            <a href="{{url_for('main.marcas')}}"
+              class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Marcas</a>
+            <a href="{{url_for('main.locales')}}"
+              class="text-black font-medium hover:border-b hover:scale-105 transition ease-in-out">Locales</a>
           </div>
         </div>
 
         <div class="flex items-center space-x-4">
-          <!-- Icono de carrito con contador -->
-          <div class="relative">
-            <button id="cart-toggle"
-              class="text-gray-700 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors">
-              <i class="fas fa-shopping-cart text-xl"></i>
-              <span id="cart-count"
-                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
-            </button>
-          </div>
-
           {% if session.usuario_id %}
           <div class="relative group">
             <button
@@ -58,17 +77,15 @@
             </button>
             <div
               class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform scale-95 group-hover:scale-100 origin-top-right">
-              <a href="{{ url_for('user.dashboard') }}"
+              {% if session.usuario_rol == 'ADMIN' %}
+              <a href="{{ url_for('admin.dashboard_admin') }}"
                 class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors">
-                Dashboard
+                Dashboard Admin
               </a>
+              {% endif %}
               <a href="{{ url_for('main.carrito') }}"
                 class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors">
                 Mi Carrito
-              </a>
-              <a href="{{ url_for('pedidos.mis_pedidos') }}"
-                class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-md mx-1 my-1 transition-colors">
-                Mis Pedidos
               </a>
               <hr class="border-gray-200 my-1" />
               <a href="{{ url_for('auth.logout') }}"
@@ -79,9 +96,9 @@
           </div>
           {% else %}
           <a href="{{ url_for('auth.login') }}"
-            class="text-blue-600 hover:text-blue-700 font-medium py-2 px-3 rounded-lg transition-colors">Login</a>
+            class="text-black hover:scale-105 transition ease-in-out font-medium py-2 px-3 rounded-lg transition-colors">Login</a>
           <a href="{{ url_for('auth.register') }}"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+            class="bg-black hover:scale-105 transition ease-in-out text-white px-4 py-2 rounded-lg">
             Registro
           </a>
           {% endif %}
@@ -94,14 +111,14 @@
   {% block content %}
 
   {% endblock %}
-  
+
   {% block footer %}
-  <footer class="bg-gray-900 text-white pt-12 pb-6">
+  <footer class="bg-black text-white pt-12 pb-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
         <div>
-          <h3 class="text-xl font-bold mb-4">SneakerShop</h3>
-          <p class="text-gray-400">
+          <h3 class="text-xl font-bold mb-4">TheBox</h3>
+          <p class="text-gray-200">
             La mejor selección de zapatillas deportivas y casuales en Perú.
             Calidad, estilo y comodidad en un solo lugar.
           </p>
@@ -111,16 +128,16 @@
           <h4 class="font-bold text-lg mb-4">Compañía</h4>
           <ul class="space-y-2">
             <li>
-              <a href="#" class="text-gray-400 hover:text-white transition-colors">Sobre Nosotros</a>
+              <a href="#" class="text-gray-200 hover:text-white transition-colors">Sobre Nosotros</a>
             </li>
             <li>
-              <a href="#" class="text-gray-400 hover:text-white transition-colors">Nuestras Tiendas</a>
+              <a href="#" class="text-gray-200 hover:text-white transition-colors">Nuestras Tiendas</a>
             </li>
             <li>
-              <a href="#" class="text-gray-400 hover:text-white transition-colors">Trabaja con Nosotros</a>
+              <a href="#" class="text-gray-200 hover:text-white transition-colors">Trabaja con Nosotros</a>
             </li>
             <li>
-              <a href="#" class="text-gray-400 hover:text-white transition-colors">Blog</a>
+              <a href="#" class="text-gray-200 hover:text-white transition-colors">Blog</a>
             </li>
           </ul>
         </div>
@@ -129,16 +146,16 @@
           <h4 class="font-bold text-lg mb-4">Ayuda</h4>
           <ul class="space-y-2">
             <li>
-              <a href="#" class="text-gray-400 hover:text-white transition-colors">Preguntas Frecuentes</a>
+              <a href="#" class="text-gray-200 hover:text-white transition-colors">Preguntas Frecuentes</a>
             </li>
             <li>
-              <a href="#" class="text-gray-400 hover:text-white transition-colors">Envíos y Devoluciones</a>
+              <a href="#" class="text-gray-200 hover:text-white transition-colors">Envíos y Devoluciones</a>
             </li>
             <li>
-              <a href="#" class="text-gray-400 hover:text-white transition-colors">Guía de Tallas</a>
+              <a href="#" class="text-gray-200 hover:text-white transition-colors">Guía de Tallas</a>
             </li>
             <li>
-              <a href="#" class="text-gray-400 hover:text-white transition-colors">Contacto</a>
+              <a href="#" class="text-gray-200 hover:text-white transition-colors">Contacto</a>
             </li>
           </ul>
         </div>
@@ -146,34 +163,38 @@
         <div>
           <h4 class="font-bold text-lg mb-4">Síguenos</h4>
           <div class="flex space-x-4">
-            <a href="#" class="text-gray-400 hover:text-white transition-colors text-xl"><i
-                class="fab fa-facebook-f"></i></a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors text-xl"><i
-                class="fab fa-instagram"></i></a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors text-xl"><i
-                class="fab fa-twitter"></i></a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors text-xl"><i
-                class="fab fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/TheBoxPeru/?locale=es_LA"
+              class="text-gray-200 hover:text-white transition-colors text-xl"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/theboxperu/"
+              class="text-gray-200 hover:text-white transition-colors text-xl"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@theboxperu"
+              class="text-gray-200 hover:text-white transition-colors text-xl"><i class="fab fa-tiktok"></i></a>
           </div>
           <div class="mt-4">
             <h5 class="font-bold mb-2">Métodos de Pago</h5>
             <div class="flex flex-wrap gap-2">
-              <img src="https://via.placeholder.com/40x25?text=Visa" alt="Visa" class="h-6" />
-              <img src="https://via.placeholder.com/40x25?text=MC" alt="Mastercard" class="h-6" />
-              <img src="https://via.placeholder.com/40x25?text=PayPal" alt="PayPal" class="h-6" />
-              <img src="https://via.placeholder.com/40x25?text=Plin" alt="Plin" class="h-6" />
+              <img src="https://1000marcas.net/wp-content/uploads/2019/12/VISA-Logo.png" alt="Visa" class="h-6" />
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/MasterCard_early_1990s_logo.png/1200px-MasterCard_early_1990s_logo.png"
+                alt="Mastercard" class="h-6" />
+              <img src="https://addonmall.com/assets/uploads/2018/09/paypal-784404_1280-1.png" alt="PayPal"
+                class="h-6" />
+              <img src="https://marketing-peru.beglobal.biz/wp-content/uploads/2024/09/logo-plin-fondo-transparente.png"
+                alt="Plin" class="h-6" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Icono_de_la_aplicaci%C3%B3n_Yape.png"
+                alt="Yape" class="h-6" />
             </div>
           </div>
         </div>
       </div>
 
-      <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center">
-        <p class="text-gray-400 text-sm">
-          &copy; 2023 SneakerShop. Todos los derechos reservados.
+      <div class="border-t border-gray-50 pt-6 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-200 text-sm">
+          &copy; 2025 TheBox. Todos los derechos reservados.
         </p>
         <div class="flex space-x-6 mt-4 md:mt-0">
-          <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Términos y Condiciones</a>
-          <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Política de Privacidad</a>
+          <a href="#" class="text-gray-200 hover:text-white text-sm transition-colors">Términos y Condiciones</a>
+          <a href="#" class="text-gray-200 hover:text-white text-sm transition-colors">Política de Privacidad</a>
         </div>
       </div>
     </div>

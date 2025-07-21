@@ -1,233 +1,229 @@
-from flask import Blueprint, render_template, redirect, url_for, session, flash, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, session, flash
 from extensions import mysql
+from datetime import datetime
 
 cart_bp = Blueprint('cart', __name__)
 
-# Ruta para agregar productos al carrito
-@cart_bp.route('/agregarCarrito', methods=['POST'])
-def add_to_cart():
+# Configuración de PayPal
+PAYPAL_CLIENT_ID = 'Abg4b8sFLI31Qe5J_MHBrVya9Itvj6Mte0d7wzRpBrTD_hPZfRWmivQxNObfZJhjPf_6VP10NdNt4Za6'
+PAYPAL_SECRET = 'EKf3gi0lstTZeK-E564vzECoERV5gFwYj-RpwtbxJgpPfWPzgB5HH1GCS8pXwfNx_9Amnb3c2Psa4DMU'  # Coloca aquí tu client secret real
+PAYPAL_BASE_URL = 'https://sandbox.paypal.com'  # Sandbox
+
+def get_paypal_token():
+    response = requests.post(
+        f"{PAYPAL_BASE_URL}/v1/oauth2/token",
+        headers={"Accept": "application/json"},
+        data={"grant_type": "client_credentials"},
+        auth=(PAYPAL_CLIENT_ID, PAYPAL_SECRET)
+    )
+    return response.json().get("access_token")
+
+# Ruta para agregar al carrito
+@cart_bp.route('/add_to_cart/<int:producto_id>', methods=['POST'])
+def add_to_cart(producto_id):
+    if 'cart' not in session:
+        session['cart'] = []
+
+    session['cart'].append(producto_id)
+
     try:
-        print("=== AGREGAR AL CARRITO ===")
-        data = request.get_json()
-        print("Datos recibidos:", data)
-        
-        product_id = str(data.get('id'))
-        product_name = data.get('nombre')
-        product_price = float(data.get('precio'))
-        
-        print(f"ID: {product_id}, Nombre: {product_name}, Precio: {product_price}")
-
-        # Inicializar el carrito si no existe 
-        if 'cart' not in session:
-            session['cart'] = {}
-            print("Carrito inicializado")
-
-        # Actualizamoss el carrito
-        if product_id in session['cart']:
-            session['cart'][product_id]['cantidad'] += 1
-            print(f"Producto existente, cantidad aumentada")
-        else:
-            session['cart'][product_id] = {
-                'nombre': product_name,
-                'precio': product_price,
-                'cantidad': 1
-            }
-            print(f"Nuevo producto añadido al carrito")
-        
-        session.modified = True
-        
-        # Calcular cantidad total de items totales
-        total_items = sum(item['cantidad'] for item in session['cart'].values())
-        print(f"Total de items en carrito: {total_items}")
-        print("Carrito actual:", session['cart'])
-
-        return jsonify({
-            'success': True,
-            'message': f'{product_name} añadido al carrito.',
-            'cart_count': total_items,
-            'cart': session['cart']
-        })
-    except Exception as e:
-        print(f"Error en add_to_cart: {e}")
-        return jsonify({
-            'success': False,
-            'message': str(e)
-        }), 400
-
-# Ruta para actualizar el carrito
-@cart_bp.route('/actualizarCarrito', methods=['POST'])
-def update_cart():
-    try:
-        data = request.get_json()
-        product_id = str(data.get('id'))
-        action = data.get('action')
-
-        if 'cart' not in session or product_id not in session['cart']:
-            return jsonify({'success': False, 'message': 'Producto no encontrado en el carrito'})
-
-        if action == 'remove':
-            del session['cart'][product_id]
-        elif action == 'decrease':
-            if session['cart'][product_id]['cantidad'] > 1:
-                session['cart'][product_id]['cantidad'] -= 1
-            else:
-                del session['cart'][product_id]
-        elif action == 'increase':
-            session['cart'][product_id]['cantidad'] += 1
-        
-        session.modified = True
-        total_items = sum(item['cantidad'] for item in session['cart'].values())
-
-        return jsonify({
-            'success': True,
-            'cart_count': total_items,
-            'cart': session['cart']
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': str(e)
-        }), 400
-
-# Ruta para obtener el carrito actual
-@cart_bp.route('/get_cart')
-def get_cart():
-    print("=== GET CART ===")
-    print("Session actual:", dict(session))
-    print("Carrito actual:", session.get('cart', {}))
-    return jsonify({'cart': session.get('cart', {})})
-
-# Ruta para depurar el carrito
-@cart_bp.route('/debug_cart')
-def debug_cart():
-    print("=== DEBUG CART ===")
-    print("Session completa:", dict(session))
-    print("Carrito:", session.get('cart', {}))
-    return jsonify({
-        'session': dict(session),
-        'cart': session.get('cart', {}),
-        'cart_keys': list(session.get('cart', {}).keys())
-    })
-
-# Ruta para guardar el carrito en historial
-@cart_bp.route('/guardar_carrito', methods=['POST'])
-def guardar_carrito():
-    if 'usuario_id' not in session:
-        return jsonify({'success': False, 'message': 'Debes iniciar sesión para guardar el carrito'}), 401
-    
-    try:
-        usuario_id = session['usuario_id']
-        carrito_data = session.get('cart', {})
-        
-        if not carrito_data:
-            return jsonify({'success': False, 'message': 'El carrito está vacío'}), 400
-        
         cursor = mysql.connection.cursor()
-        
-        # Guardar en historial de carrito
-        import json
-        carrito_json = json.dumps(carrito_data)
-        
-        cursor.execute("""
-            INSERT INTO historial_carrito (usuario_id, carrito_data) 
-            VALUES (%s, %s)
-        """, (usuario_id, carrito_json))
-        
-        mysql.connection.commit()
-        cursor.close()
-        
-        return jsonify({
-            'success': True,
-            'message': 'Carrito guardado correctamente'
-        })
-    except Exception as e:
-        # Manejo de errores
-        print(f"Error al guardar carrito: {e}")
-        return jsonify({'success': False, 'message': str(e)}), 500
 
-# Ruta para cargar el carrito actual desde el historial
-@cart_bp.route('/guardar_carrito_actual', methods=['POST'])
-def guardar_carrito_actual():
-    if 'usuario_id' not in session:
-        return jsonify({'success': False, 'message': 'Debes iniciar sesión'}), 401
-    
-    try:
-        data = request.get_json()
-        carrito_data = data.get('carrito', {})
-        
-        if not carrito_data:
-            return jsonify({'success': False, 'message': 'No hay datos del carrito'}), 400
-        
-        # Guardar en la sesión actual
-        session['cart'] = carrito_data
-        session.modified = True
-        
-        return jsonify({
-            'success': True,
-            'message': 'Carrito cargado correctamente'
-        })
-        
+        usuario_id = session.get('usuario_id')  # Será None si no hay sesión
+        cantidad = 1
+        agregado_en = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        query = """
+            INSERT INTO carrito (usuario_id, zapatilla_id, cantidad, agregado_en)
+            VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(query, (usuario_id, producto_id, cantidad, agregado_en))
+        mysql.connection.commit()
+
+        flash('Producto agregado al carrito', 'success')
+
     except Exception as e:
-        print(f"Error al cargar carrito: {e}")
-        return jsonify({'success': False, 'message': str(e)}), 500
+        flash(f'Error al agregar producto a la base de datos: {e}', 'danger')
+
+    return redirect(url_for('products.products'))
+
+# Ruta para ver el carrito
+@cart_bp.route('/cart')
+def view_cart():
+    cart = session.get('cart', [])
+    productos = []
+    direccion = None
+
+    if cart:
+        cursor = mysql.connection.cursor()
+        format_strings = ','.join(['%s'] * len(cart))
+        query = f"""
+            SELECT id, nombre, descripcion, precio, imagen_url 
+            FROM zapatillas 
+            WHERE id IN ({format_strings})
+        """
+        cursor.execute(query, tuple(cart))
+        productos = cursor.fetchall()
+
+    # Obtener dirección del usuario si está logeado
+    if 'usuario_id' in session:
+        usuario_id = session['usuario_id']
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT direccion FROM usuarios WHERE id = %s", (usuario_id,))
+        result = cursor.fetchone()
+        if result:
+            direccion = result['direccion']
+    else:
+        # Si el usuario no está logeado, usar la dirección manual de la sesión (si existe)
+        direccion = session.get('direccion_manual')
+
+    return render_template('carrito.html', productos=productos, direccion=direccion)
+
+
+# Ruta para eliminar producto del carrito
+@cart_bp.route('/remove_from_cart/<int:producto_id>')
+def remove_from_cart(producto_id):
+    if 'cart' in session:
+        session['cart'] = [pid for pid in session['cart'] if pid != producto_id]
+
+        # Eliminar también de la tabla 'carrito'
+        try:
+            cursor = mysql.connection.cursor()
+            if 'usuario_id' in session:
+                # Elimina solo para ese usuario si está logueado
+                cursor.execute("""
+                    DELETE FROM carrito 
+                    WHERE usuario_id = %s AND zapatilla_id = %s 
+                    LIMIT 1
+                """, (session['usuario_id'], producto_id))
+            else:
+                # Elimina si usuario_id es NULL
+                cursor.execute("""
+                    DELETE FROM carrito 
+                    WHERE usuario_id IS NULL AND zapatilla_id = %s 
+                    LIMIT 1
+                """, (producto_id,))
+            mysql.connection.commit()
+        except Exception as e:
+            flash(f'Error al eliminar de la base de datos: {e}', 'danger')
+
+        flash('Producto eliminado del carrito', 'info')
+
+    return redirect(url_for('cart.view_cart'))
 
 # Ruta para vaciar el carrito
-@cart_bp.route('/clear_cart', methods=['POST'])
+@cart_bp.route('/clear_cart')
 def clear_cart():
-    try:
+    if 'cart' in session:
         session.pop('cart', None)
-        session.modified = True
-        return jsonify({
-            'success': True,
-            'message': 'Carrito vaciado correctamente'
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': str(e)
-        }), 400
 
-# Ruta para actualizar la cantidad de un item en el carrito
-@cart_bp.route('/update_cart_item', methods=['POST'])
-def update_cart_item():
-    try:
-        data = request.get_json()
-        product_id = str(data.get('id'))
-        change = int(data.get('change', 0))
-
-        if 'cart' not in session:
-            session['cart'] = {}
-
-        if product_id in session['cart']:
-            current_quantity = session['cart'][product_id]['cantidad']
-            new_quantity = current_quantity + change
-            
-            if new_quantity <= 0:
-                # Eliminar el item si la cantidad llega a 0 o menos
-                del session['cart'][product_id]
-                message = f"Producto eliminado del carrito"
+        try:
+            cursor = mysql.connection.cursor()
+            if 'usuario_id' in session:
+                cursor.execute("DELETE FROM carrito WHERE usuario_id = %s", (session['usuario_id'],))
             else:
-                # Actualizar la cantidad
-                session['cart'][product_id]['cantidad'] = new_quantity
-                message = f"Cantidad actualizada"
-        else:
-            return jsonify({
-                'success': False,
-                'message': 'Producto no encontrado en el carrito'
-            }), 404
+                cursor.execute("DELETE FROM carrito WHERE usuario_id IS NULL")
+            mysql.connection.commit()
+        except Exception as e:
+            flash(f'Error al vaciar carrito en base de datos: {e}', 'danger')
 
-        session.modified = True
-        total_items = sum(item['cantidad'] for item in session['cart'].values())
+        flash('Carrito vaciado', 'warning')
 
-        return jsonify({
-            'success': True,
-            'message': message,
-            'cart_count': total_items,
-            'cart': session['cart']
-        })
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': str(e)
-        }), 400
+    return redirect(url_for('cart.view_cart'))
 
+@cart_bp.route('/checkout')
+def checkout():
+    cursor = mysql.connection.cursor()
+    cursor.execute("""
+        SELECT c.id, p.nombre, p.precio, p.stock, p.imagen_url, c.cantidad
+        FROM carrito c
+        JOIN zapatillas p ON c.zapatilla_id = p.id
+    """)
+    productos = cursor.fetchall()
+
+    total = sum(p['precio'] * p['cantidad'] for p in productos)
+    return render_template('checkout.html', productos=productos, total=total)
+
+from flask import request, jsonify
+
+@cart_bp.route('/confirm-payment', methods=['POST'])
+def confirm_payment():
+    data = request.get_json()
+    order_id = data.get('orderID')
+    cursor = mysql.connection.cursor()
+
+    # Obtener dirección
+    if 'usuario_id' in session:
+        usuario_id = session['usuario_id']
+        cursor.execute("SELECT direccion FROM usuarios WHERE id = %s", (usuario_id,))
+        result = cursor.fetchone()
+        direccion = result['direccion'] if result else None
+    else:
+        usuario_id = None
+        direccion = session.get('direccion_manual')
+
+    # Obtener productos del carrito
+    if usuario_id:
+        cursor.execute("""
+            SELECT c.zapatilla_id, c.cantidad, z.precio
+            FROM carrito c
+            JOIN zapatillas z ON c.zapatilla_id = z.id
+            WHERE c.usuario_id = %s
+        """, (usuario_id,))
+    else:
+        cursor.execute("""
+            SELECT c.zapatilla_id, c.cantidad, z.precio
+            FROM carrito c
+            JOIN zapatillas z ON c.zapatilla_id = z.id
+            WHERE c.usuario_id IS NULL
+        """)
+
+    carrito = cursor.fetchall()
+
+    if not carrito:
+        return jsonify({"error": "El carrito está vacío"}), 400
+
+    total = sum(item['precio'] * item['cantidad'] for item in carrito)
+
+    # 1. Insertar pedido en tabla pedidos
+    fecha_pedido = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    cursor.execute("""
+        INSERT INTO pedidos (usuario_id, total, estado, direccion, fecha_pedido)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (usuario_id, total, 'pagado', direccion, fecha_pedido))
+    pedido_id = cursor.lastrowid
+
+    # 2. Insertar detalles del pedido
+    for item in carrito:
+        cursor.execute("""
+            INSERT INTO detalles_pedido (pedido_id, zapatilla_id, cantidad, precio_unitario)
+            VALUES (%s, %s, %s, %s)
+        """, (pedido_id, item['zapatilla_id'], item['cantidad'], item['precio']))
+
+        # 3. Actualizar stock
+        cursor.execute("""
+            UPDATE zapatillas
+            SET stock = stock - %s
+            WHERE id = %s
+        """, (item['cantidad'], item['zapatilla_id']))
+
+    # 4. Limpiar carrito en la base de datos
+    if usuario_id:
+        cursor.execute("DELETE FROM carrito WHERE usuario_id = %s", (usuario_id,))
+    else:
+        cursor.execute("DELETE FROM carrito WHERE usuario_id IS NULL")
+
+    mysql.connection.commit()
+
+    # Limpiar carrito en la sesión
+    session.pop('cart', None)
+
+    return jsonify({"message": "Pago confirmado, pedido registrado, stock actualizado"})
+
+
+@cart_bp.route('/set_direccion', methods=['POST'])
+def set_direccion():
+    direccion = request.form.get('direccion')
+    session['direccion_manual'] = direccion
+    flash('Dirección guardada correctamente.', 'success')
+    return redirect(url_for('cart.view_cart'))

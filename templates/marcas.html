@@ -1,0 +1,88 @@
+{% extends 'app.html' %}
+
+{% block title %}
+Marcas
+{% endblock %}
+
+{% block content %}
+
+<body class="bg-gray-100 flex flex-col">
+    <div class="min-h-screen mx-auto text-center py-8">
+        <!-- Título principal -->
+        <h1
+            class="text-3xl md:text-5xl min-h-[150px] flex justify-center items-center font-extrabold my-8 p-6 uppercase">
+            Las mejores marcas están en THE BOX!
+        </h1>
+
+        <!-- Grid de marcas -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-10 px-4 sm:px-6 lg:px-8">
+            <!-- adidas -->
+            <div class="flex items-center justify-center animate-fadeInUp delay-100">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/ADIDAS_LOGO_WEB.png?v=1692647121" alt="Adidas"
+                        class="w-40 h-auto transition-transform duration-300 hover:scale-105 transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-100">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/NEW_BALANCE_LOGO_WEB.png?v=1692647291"
+                        alt="New Balance" class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-100">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/VEJA_WEB.jpg?v=1746023496" alt="Veja"
+                        class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-100">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/Imagen_de_WhatsApp_2023-08-21_a_las_11.57.48_1_983836c6-782a-4304-b369-c1bdd0d3d4f1.jpg?v=1692638615"
+                        alt="Vans" class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-150">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/PUMA_LOGO_WEB.png?v=1692647304" alt="Puma"
+                        class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-150">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/DUNKELVOLK_LOGO_WEB_c52a9299-001c-431f-81f0-c6afc9bf2e5d.png?v=1728594279"
+                        alt="Dunkelvolk" class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-150">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/LACOSTE_WEB.jpg?v=1748292408" alt="Lacoste"
+                        class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-150">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/MOMNTS_WEB.jpg?v=1746023465" alt="Monts"
+                        class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-200">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/DVK_LOGO_WEB.png?v=1692647201" alt="DVK"
+                        class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-200">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/REEF_LOGO_WEB.png?v=1692647362" alt="REEF"
+                        class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-200">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/CONVERSE_LOGO_WEB.png?v=1707169720" alt="Converse"
+                        class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-200">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/TOMMY_WEB.png?v=1706896997" alt="Tommy Hilfiger"
+                        class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+            <div class="flex items-center justify-center animate-fadeInUp delay-250">
+                <a href="{{url_for('products.products')}}"><img
+                        src="https://thebox.com.pe/cdn/shop/files/CLEAN_LAB_WEB.jpg?v=1746023670" alt="Clean Lab"
+                        class="w-40 h-auto transition-transform duration-300 hover:scale-105"></a>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
